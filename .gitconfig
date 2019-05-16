@@ -1,0 +1,5 @@
+[user]
+	name = zoran
+	email = zoran.lj.pantic@gmail.com
+[core]
+	editor = emacsclient -c
