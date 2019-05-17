@@ -1,0 +1,35 @@
+#+AUTHOR: Zoran Pantic
+#+TITLE: Communication Protocols
+* Short description
+** Arduino board 
+Subject are protocols: Serial, SPI, I2C, CAN. Other protocols can be covered on request. 
+
+Software used in this course is Arduino embedded software and development is done on Windows or Linux based PC. Mac can be used too but our teachers might not be the most familiar with Mac OS. Code for this course will be written in C++ (simplified Aeduino version) and for IDE it is possible to use whatever students prefer. Our suggestions are Arduino IDE or Atom text editor based IDE.
+
+This course is aimed towards people who are not very familiar with C/C++ or with programming in general. All the libraries needed can be relatively easily found on Internet so regardless of protocol and HW devices (needed for a protocol in question) students are not expected to write libraries for particular hardware.
+** Cortex M board 
+Subject are protocols: Serial, SPI, I2C, CAN. Other protocols can be covered on request. 
+
+All the student will have to have Windows or Linux based PC and  recomended IDE is Attolic, although not mandatory (if someone for ex. is already a Keil user it is OK to use that environment.)  
+Cortex M Microcontroller in this course is not having separate OS, instead we will use its HAL.
+
+Code for this course is written in C and it is expected that students are familiar with C language. Since this card (Cortex M) is not used in hobbyist environment, libraries for a given devices used might not be freely available so they (libraries) will have to be written by students and hence our requirenment that students are familiar with C language.
+*** Note
+    Of course, course can be adapted on such a way that we provide libraries in advance.  
+** Cortex M board with RTOS 
+Subject are protocols: Serial, SPI, I2C, CAN, Other protocols can be covered on request. 
+Code for this course is written in C and Microcontroller is using RTOS. 
+** Raspberry Pi board MQTT Home Automation 
+Subject is MQTT.
+
+This subject can be incorporated in any of the previously mentioned courses but it needs some aditional hardware and software beyond what was already mentioned. Hardware needed is ESP6266 device(s) and Raspberry Pi while software can be OpenHUB2 or Node-Red plus Node.js.
+
+For this course/lab it is necesery to use Linux (on Raspberry Pi) so some basic Linux knowledge is needed but students can be assisted by instructor if that is not the case.
+
+It is also possible to use Amazon Web Services (AWS) in this lab. If AWS is used security (CA, keys) becomes a subject, so Wireshark protocol analysier will be used. 
+** Logic analyser
+For all labs students will use Logic Analyser with free sigrok software that will help them understand inner working of protocol(s) used in the labs. 
+* NOTES
+- Not all the hardware is mentioned. If for example SPI protocol lab is requested than beyond Microcontroler and PC one needs extra devices (like already mentioned ESP6266.) needed to incorporate protocol in question.
+- Every student must have a PC with administrative rights.
+   
