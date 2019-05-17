@@ -81,6 +81,7 @@
 .var/
 .viminfo
 .wget-hsts
+books/
 Documents/
 Downloads/
 Passwords.kdbx
