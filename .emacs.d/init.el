@@ -186,8 +186,17 @@
 
 ;;(rtags-start-process-unless-running)
 (use-package cmake-ide)
-(require 'rtags) ;; optional, must have rtags installed
 (cmake-ide-setup)
+
+;; following is courtesy of http://syamajala.github.io/c-ide.html
+(require 'rtags) ;; optional, must have rtags installed
+;;(require 'company-rtags)
+(setq rtags-completions-enabled t)
+(eval-after-load 'companyb
+  '(add-to-list
+    'company-backends 'company-rtags))
+(setq rtags-autostart-diagnostics t)
+(rtags-enable-standard-keybindings)
 
 ;; following is regarding emmet-moce html and css
 (use-package emmet-mode
@@ -209,6 +218,18 @@
 
 (add-hook 'window-setup-hook '(lambda () (set-cursor-color "white")))
 (add-hook 'after-make-frame-functions '(lambda (f) (with-selected-frame f (set-cursor-color "white"))))
+
+;; courtesy of https://www.emacswiki.org/emacs/CompanyMode page.
+;;(require 'color)
+;;  
+;;  (let ((bg (face-attribute 'default :background)))
+;;    (custom-set-faces
+;;     `(company-tooltip ((t (:inherit default :background ,(color-lighten-name bg 2)))))
+;;     `(company-scrollbar-bg ((t (:background ,(color-lighten-name bg 10)))))
+;;     `(company-scrollbar-fg ((t (:background ,(color-lighten-name bg 5)))))
+;;     `(company-tooltip-selection ((t (:inherit font-lock-function-name-face))))
+;;     `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
+;; courtesy of https://www.emacswiki.org/emacs/CompanyMode page.
 
 ;;; Commentary:
 
@@ -237,6 +258,11 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:background nil)))))
+ '(default ((t (:inherit nil :stipple nil :background "#1E2326" :foreground "#DEDEDE" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 128 :width normal :foundry "PfEd" :family "DejaVu Sans Mono"))))
+ '(company-scrollbar-bg ((t (:background "#ffffffffffff"))))
+ '(company-scrollbar-fg ((t (:background "#ffffffffffff"))))
+ '(company-tooltip ((t (:inherit default :background "#ffffffffffff"))))
+ '(company-tooltip-common ((t (:inherit font-lock-constant-face))))
+ '(company-tooltip-selection ((t (:inherit font-lock-function-name-face)))))
 
 ;;; init.el ends here
