@@ -1,5 +1,5 @@
 ;;; package --- Summary
-
+;; when in problem check logs and messages and also turn on M-x toggle-debug-on-error
 (require 'package)
 ;(add-to-list 'package-archives
 ;             '("MELPA Stable" . "http://stable.melpa.org/packages/") t)
@@ -184,7 +184,7 @@
 (use-package irony
   :ensure t)
 
-;;(rtags-start-process-unless-running)
+;(rtags-start-process-unless-running)
 (use-package cmake-ide)
 (cmake-ide-setup)
 
@@ -266,3 +266,9 @@
  '(company-tooltip-selection ((t (:inherit font-lock-function-name-face)))))
 
 ;;; init.el ends here
+ ;;'(company-scrollbar-bg ((t (:background "#ffffffffffff"))))
+ ;;'(company-scrollbar-fg ((t (:background "#ffffffffffff"))))
+ ;;'(company-tooltip ((t (:inherit default :background "#ffffffffffff"))))
+ ;;'(company-tooltip-common ((t (:inherit font-lock-constant-face))))
+ ;;'(company-tooltip-selection ((t (:inherit font-lock-function-name-face)))))
+
