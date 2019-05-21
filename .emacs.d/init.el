@@ -28,6 +28,7 @@
 (setq inhibit-startup-screen t)
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
+(global-display-line-numbers-mode)
 
 (use-package evil
   :ensure t)
@@ -180,6 +181,18 @@
 (use-package company
   :ensure t
   :init (global-company-mode))
+;; courtesy of http://tuhdo.github.io/c-ide.html
+(add-to-list 'company-backends 'company-c-headers)
+
+
+;; courtesy of http://tuhdo.github.io/c-ide.html
+(setq
+ ;; use gdb-many-windows by default
+ gdb-many-windows t
+
+;; Non-nil means display source file containing the main routine at startup
+ gdb-show-main t
+ )
 
 (use-package irony
   :ensure t)
@@ -256,5 +269,5 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#1E2326" :foreground "#DEDEDE" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 126 :width normal :foundry "PfEd" :family "DejaVu Sans Mono")))))
+ '(default ((t (:inherit nil :stipple nil :background "#1E2326" :foreground "#DEDEDE" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 134 :width normal :foundry "PfEd" :family "DejaVu Sans Mono")))))
 ;;; init.el ends here

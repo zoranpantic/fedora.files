@@ -1,6 +1,4 @@
 sudo su
-ls =la
-sensors
 sensors-detect 
 sudo dnf -y install bridge-utils libvirt virt-install qemu-kvm
 lsmod | grep kvm
@@ -58,7 +56,6 @@ less /etc/passwd
 whereis whireshark
 whereis wireshark
 cd /usr/bin/wireshark
-cd /usr/bin/
 sudo wireshark 
 wireshark 
 tshark 
@@ -85,7 +82,6 @@ nbb
 ifconfig
 alsaunmute 
 sudo dnf install audacity
-tmux 
 ls /proc/asound/
 ls -la /proc/asound/
 less /proc/asound/devices 
@@ -129,14 +125,12 @@ less /etc/resolv.conf
 cd /proc/sys/net/bridge
 less bridge-nf-call-iptables 
 less bridge-nf-call-arptables 
-uname
 man uname
 uname -r
 uname -n
 man uname -rvn
 man uname -a
 man uname -s
-uname -a
 uname -s
 uname -V
 uname -l
@@ -260,9 +254,7 @@ ls /usr/share/bash-completion/completions/
 ls -la bin-files/
 ls -la .pcloud/
 ls -la Public/
-libclang
 libclang -version
-less CMakeFiles/CMakeOutput.log 
 whereis clang
 sudo install llvm
 sudo dnf install llvm/clang
@@ -328,8 +320,6 @@ sudo ln -sf ~/.local/popcorntime/Popcorn-Time /usr/bin/Popcorn-Time
 sudo vim /usr/share/applications/popcorntime.desktop
 wget -0 ~/.local/popcorntime/popcorn.png https://upload.wikimedia.org/wikipedia/commons/d/df/Pctlogo.png
 wget ~/.local/popcorntime/popcorn.png https://upload.wikimedia.org/wikipedia/commons/d/df/Pctlogo.png
-git clone https://gitlab.com/Preisschild/popcorntime-flatpak
-cd popcorntime-flatpak/
 sudo rm /usr/share/applications/popcorntime.desktop 
 sudo rm /usr/bin/Popcorn-Time 
 ;1R;1R;17R;51R;51R;61R;61R;61R;61R;61R;61R;61R;61R;61R;61R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;68R;86R;51R;51R;69R;49R;58R;1R;1R;17R;49R;49R;49R;67R;49R;58R;1R;1R;17R;47R;60R;65R;65R;66R;64R;64R;64R;64R;64R;73R
@@ -338,8 +328,6 @@ sudo dnf history
 sudo dnf install flatpak-builder
 ls -la popcorntime/
 rm *
-flatpak-builder --install --install-deps-from=flathub popcorntime sh.popcorntime.PopcornTime.yml
-cd popcorntime/
 rm -r *
 sudo flatpak-builder --install --install-deps-from=flathub popcorntime sh.popcorntime.PopcornTime.yml
 ssh zoran@192.168.1.1
@@ -421,11 +409,9 @@ ls 0la
 ls -la ../popcorntime-flatpak/
 ls -la ../popcorntime
 cd ../popcorntime
-./Popcorn-Time 
 rm -r popcorntime
 ./bin/rc -J .
 emacs +73:34 src/rdm.cpp
-cd ~/Downloads/
 https://github.com/brianjcj/auto-complete-clang.git
 git clone https://github.com/brianjcj/auto-complete-clang.git
 cd auto-complete-clang/
@@ -469,8 +455,6 @@ touch CMakeList.txt
 rm CMakeList.txt 
 mv train.cpp train.cxx
 rm train.cpp~ 
-cmake
-cmake ..
 ./bin/rdm &
 cd build/\
 rdm 
@@ -485,7 +469,6 @@ ls -la .local/ls -la
 json
 $RDM
 env $PATH
-ls -la ~/.local/
 mkdir ~/.config/systemd/user/
 mkdir -r ~/.config/systemd/user/
 mkdir --help
@@ -526,7 +509,6 @@ source ~/.bashrc
 echo $PATH
 rdm.servic
 rdm.service
-cd .local/rtags/bin/
 ./rdm --help
 ./rdm --help | less
 sudo dnf install rdm
@@ -537,7 +519,6 @@ less rtags-autoloads.el
 less rtags.elc
 ./rdm &
 kill -9 6491
-rdm
 sudo ps
 sudo ps -a
 ps -ah
@@ -597,8 +578,6 @@ emacs -t
 rc
 cmake --help
 history
-df
-df -a
 histoty
 systemctl --user daemon-reload 
 vim .bashrc 
@@ -636,11 +615,9 @@ make VERBOSE
 make -VERBOSE
 cd cmake_training/
 ./cmake-training 
-make clean
 [zoran@workstation build]$ 
 dir
 sudo find / -name pcloud*
-cd ~/bin-files/
 cd pc
 cd .pcloud/
 ls -la | grep ema
@@ -655,7 +632,6 @@ mkdir lesson3
 mkdir lesson1
 mkdir lesson10
 rm l*
-rm -r l*
 mkdir lesson02
 touch lesson2.cpp
 rm lesson2.cpp 
@@ -665,16 +641,12 @@ clang++ anatomy01.cpp
 ./a.out 
 rm a.out 
 ccmake ../
-make VERBOSE=1
 cat intro 
 cat cmake_install.cmake 
-tmux
 cat CMakeCXXCompilerId.cpp 
 cd tmp/
 cat CMakeOutput.log 
 vim ~/.config/systemd/user/rdm.service ls -la
-cd CMakeTmp/
-cd intro.dir/
 openvpn --version
 systemctl status openvpn
 systemctl status openvpn.service
@@ -772,7 +744,6 @@ vmstat
 lsof 
 lsof | less
 lsof | more
-htop
 lotop
 iostat
 iotop
@@ -787,7 +758,6 @@ whereis pcloud
 sudo fing / -name pcloud
 sudo find / -name pcloud
 cat pck
-./pcloud &
 cd ../pCloudDrive/
 mkdir irena
 cd Irena-DCIM/
@@ -823,31 +793,25 @@ emacsclient index.html
 emacsclient 
 chromium-browser index.html 
 chromium-browser index.html &
-emacsclient &
 cd Down
 cp cheatsheet-a5.pdf ~/src/web_dev/
 cd ~/src/web_dev/
 evince cheatsheet-a5.pdf 
-evince Sanet.st_operating-system-design-xinu-approach-2nd.pdf 
 emacs -c &
 cd src/web_dev/training_site/
 mkdir img
 mkdir css
 cd css
 touch stylesheet.css
-su
 firefox index.html &
 git
-cd cpp/
 git --version
 sudo dnf  install git
 sudo dnf  install git-all
 sudo cd /etc/
 cd /etc/
 ls -la | grep git
-ls -la | less
 git config --list --show-origin 
-cd src/cpp/
 git config --global user.name "zoran"
 git config --global user.email "zoran.lj.pantic@gmail.com"
 git config status.
@@ -860,46 +824,28 @@ git config -h
 git add lesson02/*.cpp
 git add lesson02/CMakeLists.txt
 cd lesson02/build/
-cd CMakeFiles/
-cd .git/
 cd info/
-cat index 
 vim .gitignore
-cd lesson02/
 cat \\
 vim .gitignore 
-git add .gitignore 
-git commit 
 clar
-./pcloud 
 cd\
 ./pcloud
-cd ~/pCloudDrive/
-cd bin-files/
-cd autostart/
-cat pcloud.desktop 
 ls -la ~/bin-files/
 vim pcloud.desktop 
-cd pCloudDrive/
-cd Books
-ls 
 cp Books ~/Documents/books &
 cp -r Books ~/Documents/books &
 cd git/
 cd Linux/
 evince '[Evi_Nemeth,_Garth_Snyder,_Trent_R._Hein]_UNIX_and(BookFi).pdf' 
 evince '[Evi_Nemeth,_Garth_Snyder,_Trent_R._Hein]_UNIX_and(BookFi).pdf' &
-cd Documents/
-cd books/
 cd Vim-emacs/
 evince mastering-emacs.pdf 
 evince mastering-emacs.pdf &
 xbrlapi mastering-emacs.pdf &
-cd .
 sudo dnf install i3
 systemctl
 systectl --user status emacs.service
-systemctl --user status emacs.service
 cat config 
 qq
 less config 
@@ -932,15 +878,11 @@ sudo source .Xresources
 chmod 775 test.123 
 ./test.123 
 source test.123 
-echo $TERM
 rxvt-unicode
-source .Xresources
 xrdb --man
 man xrdb 
-xrdb .Xresources
 urxvt
 bash
-emacsclient -c .Xresources &
 rm test.123 
 xmodmap -p
 xmodmap -pk
@@ -1025,11 +967,9 @@ ps -a | grep pcloud
 ps -a | grep pCloud
 ps -a | grep p
 cd ../bin
-cd ../bin-files/
 cat pcloud 
 git clone https://github.com/hastinbe/i3-volume.git ~/i3-volume
 alsamixer &
-ps
 alsamixer --v
 ps -a
 ps -h
@@ -1041,8 +981,6 @@ sudo dnf install i3statu
 sudo dnf install i3block
 echo $DISPLAY
 echo $DBUS_SESSION_BUS_ADDRESS
-cd Downloads/
-ls -lat
 emacs -c dunstrc1 &
 emacsclient -c dunstrc1 
 emacsclient -c dunstrc1 &
@@ -1050,42 +988,28 @@ sudo dnf install dunst
 dunst --version
 dunst --h
 man dunst
-cd .config/
 cp ~/Downloads/dunstrc1 dunst/
 cp ~/Downloads/dunstrc1 dunst/dunstrcl
 cp -r ~/Downloads/dunstrc1 dunst/dunstrcl
 mkdir dunst
 cp -r ~/Downloads/dunstrc1 dunst/
 cd dunst/
-cat dunstrc1 
 dunst
-alsamixer 
 emacsclient -c
-systemctl --user stop emacs.service 
-systemctl --user start emacs.service 
-systemctl --user start emacs.service &
-systemctl --user status emacs.service 
 mkdir c
 ls -la cpp/
-mkdir ch02
 m ch02.c 
 rm ch02.c 
 touch ch02.c
 touch CMakeLists.txt
 ckear
-cd 
-cd src/c/ch02/
-ccmake
 cat CMake
-cat CMakeLists.txt
 r
 rm cmake_install.cmake 
 rm CMakeCache.txt 
 rm Makefile 
 ls -la ../../cpp/lesson02/
 ls -la ../../cpp/lesson02/build/
-make
-./intro 
 ls -la /usr/lib/gcc/x86_64-redhat-linux/8/include/
 ls -la /usr/lib/gcc/x86_64-redhat-linux/8/include/ | less
 ls -la /usr/include/
@@ -1108,60 +1032,596 @@ cd..
 cd usr/lib/gcc/
 cd x86_64-redhat-linux/
 cd 8
-cd include/
 emacsclient -c stddef.h &
 systemctl status rdma.service 
-systemctl --user status rdm.service 
-systemctl --user status rdm.socket 
-rtags
-cd .local/
-cd rtags/
 cd bin/
-sudo reboot now
-emacsclient -c &
-top
 cd irony/
 cat cdb-json-projects 
-cd src/
-cd c
-cd ch02/
 touch listing2_1.c
 rm -r CMakeFiles/
 rm -r CMakeCache.txt 
-rm -r build/
 vim CMakeLists.txt
 rm ch02.c
 rm ch02.c~ 
 emacsclient -c listing2_1.c &
-mkdir build
 cd build
 cat ../CMakeLists.txt
 vim ../CMakeLists.txt
-ccmake ..
-make ..
-pwd
-ccmake .
-cd build/
-make .
-sudo dnf update
 sudo install codeblocks
 sudo dnf install code:blocks
 sudo dnf install code::blocks
 sudo dnf install Code::Blocks
 sudo dnf install codeblocks
-clear
-cd .emacs.d/
 git init
-git status 
 git add .emacs.d/init.el
-git commit
-git status
 ls -la .config/
 ls -la .config/autostart/
 cat .config/autostart/pcloud.desktop 
-cd
 git add .config/i3/config
-ls -la
 git add .Xmodmap
 git add .Xresources
 cat myinit.org 
+git add .bash_history 
+git add .bash_profile 
+git add .bashrc 
+ls -la .audacity-data/
+cp .gitignore ~/
+cat .gitconfig 
+git add .gitconfig .gitignore
+cd ch02
+emacsclient -c CMakeLists.txt &
+rm -r ch*
+mkdir ch02
+touch ch02_1.c
+emacsclient -c CMakeLists.txt
+emacs -c ch02_1.c 
+emacsclient -c ch02_1.c 
+mnkdir build
+cd bui
+make ..
+emacsclient -c ../ch02_1.c
+martinluth~make
+emacsclient -c ../ch02_1.c &
+ls -la .emacs.d/
+df -a
+cd ../Documents/
+cd programing/
+cd ~/bin-files/
+cp Addison.Wesley.C.Primer.Plus.6th.Edition.Dec.2013.ISBN.0321928423.pdf ~/Documents/books/
+evince Addison.Wesley.C.Primer.Plus.6th.Edition.Dec.2013.ISBN.0321928423.pdf 
+evince Addison.Wesley.C.Primer.Plus.6th.Edition.Dec.2013.ISBN.0321928423.pdf  &
+echo $TERM
+less .Xresources
+source .Xresources
+xdb
+echo $terminfo
+echo $TERMINFO
+
+terminfo
+bash --version 
+bash --help 
+xrdb .Xresources
+xterm
+tmux 
+ls -la src.3e.tar.gz 
+ls -la src.3e.tar.gz
+tar -xzf src.3e.tar.gz 
+cat systype.sh 
+less README 
+cd exercises/\
+cd exercises/
+cat asyncsocket.c 
+find . -name appue.h
+find . -name apue.h
+cd include/
+less apue.h 
+b
+emacsclient -a &
+cd .emacs.d/
+emacsclient -nw &
+emacsclient --a &
+emacsclient -c --a &
+emacsclient -c -a "" &
+vim .emacs.d/init.el
+emacs
+emacs -s &
+/usr/bin/emacs.deamon
+cd /usr/bin/
+ls -la | less
+cat emacsclient 
+1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2cq
+emacs-26.1 
+emacsclient -c -a &
+sudo dnf install emacsclient 
+sudo dnf install emacs
+./emacs
+kill -9 6585
+emacs --debug -init &
+emacs --debug-init &
+emacsclient &
+systemctl --user start emacs.service 
+cd autostart/
+cat pcloud.desktop 
+systemctl --user disable emacs.service 
+cd ~/.config/systemd/user/default.target.wants/
+systemctl --user start emacs.service
+systemctl --user status emacs.service
+emacsclient -c %
+systemctl --user stop emacs.service 
+systemctl --user start emacs.service &
+systemctl --user enable emacs.service
+lear
+cat courses_suggestion.txt 
+rm courses_suggestion.txt*
+less courses_suggestion.
+less courses_suggestion.txt 
+mv Documents/books/ ~/
+cd Documents/
+mv Sanet.st_operating-system-design-xinu-approach-2nd.pdf ~/books/
+rm some*
+rm test.txt 
+rm '#some1.cxx#' 
+cat lesson.org 
+rm lesson.org 
+git add Documents/courses_suggestion.org
+git add -f Documents/courses_suggestion.org
+git commit 
+emacs -c .gitignore &
+emacsclient -c .gitignore &
+git add .gitignore 
+git commit
+git commit -m init.el
+~cd src/cpp/lesson02/
+cd src/cpp/lesson02/
+less CMakeCache.txt 
+cp ~/Downloads/mastering-cmake.pdf ~/books/
+evince ~/books/mastering-cmake.pdf 
+evince ~/books/mastering-cmake.pdf &
+cmake -i
+cmake -gui
+cmake D
+cmake -D
+cmake -G
+cmake -i -G
+cmake -i ..
+cmake-gui ..
+cat Makefile 
+ls -la intro.dir/
+cd intro.dir/
+cat build.make 
+less build.make 
+less flags.make 
+less progress.make 
+less DependInfo.cmake 
+less anatomy01.cpp.o 
+less depend.internal 
+cd CMakeTmp/
+make .\
+pwd 
+ls -la ../
+cd ~/Downloads/
+cp apue.3e/ ~/src/c/
+cp -r apue.3e/ ~/src/c/
+sudo find / -name unp.h
+cd books/
+cd unpv13e/
+ls -le
+ls ~/src/c/
+mkdir ~/src/unix
+cp unpv13e/ ~/src/unix/
+cp -r unpv13e/ ~/src/unix/
+cd ~/src/
+ls -la c
+mkdir networking
+cp c/apue.3e/ networking/
+cp -r c/apue.3e/ networking/
+ls -la .
+ls -la */*
+ls -la */*/*
+cd ~/books/
+ls cp \[Michael_Kerrisk\]_The_Linux_Programming_Interface\(BookFi\).pdf ~/src/networking/
+cp \[Michael_Kerrisk\]_The_Linux_Programming_Interface\(BookFi\).pdf ~/src/networking/
+mv '[Michael_Kerrisk]_The_Linux_Programming_Interface(BookFi).pdf' The_Linux_Programming_Interface_Michael_Kerrisk.pdf 
+cd ../c
+ls -la ~/books/
+ls -lat ~/books/
+cp ~/books/Addison.Wesley.C.Primer.Plus.6th.Edition.Dec.2013.ISBN.0321928423.pdf ~/src/c/
+cd ~/src/c
+mv Addison.Wesley.C.Primer.Plus.6th.Edition.Dec.2013.ISBN.0321928423.pdf C.Primer.Plus.6th.Edition.pdf 
+cd pCloudDrive/
+cd bin-files/
+./pcloud 
+./pcloud &
+cd ~/pCloudDrive/
+cd Books
+cp Advanced_Programming_in_the_UNIX_Environment,_3rd_Edition.pdf ~/books/
+cp Advanced_Programming_in_the_UNIX_Environment,_3rd_Edition.pdf ~/src/networking/ &
+cd src/networking/
+mv networking/Advanced_Programming_in_the_UNIX_Environment,_3rd_Edition.pdf unix/
+mv networking/The_Linux_Programming_Interface_Michael_Kerrisk.pdf unix/
+cp ~/pCloudDrive/Books/\[Kevin_R._Fall\,_W._Richard_Stevens\]_TCPIP_Illustr\(BookFi\)\ \(1\).pdf networking/
+mv '[Kevin_R._Fall,_W._Richard_Stevens]_TCPIP_Illustr(BookFi) (1).pdf' Kevin_R._Fall_W._Richard_Stevens_TCPIP_Illustr.pdf 
+evince Kevin_R._Fall_W._Richard_Stevens_TCPIP_Illustr.pdf 
+cp ~/pCloudDrive/Books/\[W._Richard_Stevens\]_TCP_IP_Illustrated\,_Volume_3\(BookFi\).djvu 
+cp ~/pCloudDrive/Books/\[W._Richard_Stevens\]_TCP_IP_Illustrated\,_Volume_3\(BookFi\).djvu .
+mv \[W._Richard_Stevens\]_TCP_IP_Illustrated\,_Volume_3\(BookFi\).djvu W._Richard_Stevens_TCP_IP_Illustrated_Volume_3.djvu 
+evince W._Richard_Stevens_TCP_IP_Illustrated_Volume_3.djvu 
+cd ../networking/
+event
+cp ~/pCloudDrive/Books/\[W._Richard_Stevens\,_Gary_R._Wright\]_TCP_IP_Illust\(BookFi\)\ \(1\).epub .
+cp ~/pCloudDrive/Books/\[Gary_R._Wright\,_W._Richard_Stevens\]_TCP_IP_Illust\(BookFi\).djvu .
+mv \[Gary_R._Wright\,_W._Richard_Stevens\]_TCP_IP_Illust\(BookFi\).djvu Gary_R._Wrigh,_W._Richard_Stevens_TCP_IP_Illust_Implementation_Book2.djvu 
+mv \[W._Richard_Stevens\,_Gary_R._Wright\]_TCP_IP_Illust\(BookFi\)\ \(1\).epub W._Richard_Stevens,Gary_R._Wright_TCP_IP_Illust_Implementation_Book2.epub 
+evince Gary_R._Wrigh,_W._Richard_Stevens_TCP_IP_Illust_Implementation_Book2.djvu 
+mv W._Richard_Stevens,Gary_R._Wright_TCP_IP_Illust_Implementation_Book2.epub TCP.IP.Illustrated.Volume2.Implementation.epub 
+evince ls -la
+evince TCP.IP.Illustrated.Volume2.Implementation.epub 
+mv Gary_R._Wrigh,_W._Richard_Stevens_TCP_IP_Illust_Implementation_Book2.djvu 2.TCP.IP,Illustrated.Volume2.Implementation.djvu 
+mv W._Richard_Stevens_TCP_IP_Illustrated_Volume_3.djvu 3.TCP.IP.Illustrated.Volume3.djvu 
+TCP.I_.._Richaated.Volume1rThe.Protocols.d_Stevens_TCPIP_Illustr.pdf Kevin_R._Fall_W._Richard_Stevens_TCPIP_Illustr.pdf 
+mv Kevin_R._Fall_W._Richard_Stevens_TCPIP_Illustr.pdf 1.TCP.IP.Illustrated.Volume1.The.Protocols.pdf 
+cp ~/pCloudDrive/Books/
+cp ~/pCloudDrive/Books/UNIX\ Network\ Programming\,\ Volume\ 1\,\ Third\ Edition\,\ The\ Sockets\ Networking\ API.pdf 
+cp ~/pCloudDrive/Books/UNIX\ Network\ Programming\,\ Volume\ 1\,\ Third\ Edition\,\ The\ Sockets\ Networking\ API.pdf .
+cp ~/pCloudDrive/Books/NetworkProgrammingIntro.pdf .
+mv 'UNIX Network Programming, Volume 1, Third Edition, The Sockets Networking API.pdf' 'UNIX.Network.Programming.Volume1.Third.Edition.The.Sockets.Networking.API.pdf' 
+mv UNIX.Network.Programming.Volume1.Third.Edition.The.Sockets.Networking.API.pdf 4.UNIX.Network.Programming.Volume1.Third.Edition.The.Sockets.Networking.API.pdf 
+cp ~/pCloudDrive/Books/c-in-one-hour-a-day-8th.pdf cpp/
+mv c-in-one-hour-a-day-8th.pdf c++.in.one.hour.a.day,8th.pdf 
+ls -lat ~/pCloudDrive/Books
+cd .
+mkdir xinu
+cp ~/pCloudDrive/Books/Sanet.st_operating-system-design-xinu-approach-2nd.pdf xinu/
+cd xinu/
+evince Sanet.st_operating-system-design-xinu-approach-2nd.pdf 
+mv Sanet.st_operating-system-design-xinu-approach-2nd.pdf operating.system.design.xinu.approach.2nd.pdf 
+cd ../unix/
+cd src/c/
+setxkbmap -querry
+setxkbmap -query
+journalctl | less
+git describe 
+git show 
+cd .git/
+cat in
+cat index \
+cat index 
+1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c1;2c
+commit 7e7b1edc59a93a510579d1aacc041b1760639ca2
+Date:   Fri May 17 23:43:58 2019 +0200
+commit 2168f874b3df2d0fd8e42fd0ab3f3abf6d5825fd
+Author: zoran <zoran.lj.pantic@gmail.com>
+Date:   Fri May 17 23:42:02 2019 +0200
+https://github.com/zoranpantic/linux-dot-files.git
+git remote add origin https://github.com/zoranpantic/fedora.files.git
+git remote show
+git push -u origin master
+sudo dnf upgrade
+sudo dnf upgrade --refresh
+sudo dnf install dnf-plugin-system-upgrade
+sudo dnf --refresh upgrade
+sudo dnf system-upgrade download --releasever=30
+dnf system-upgrade reboot
+sudo dnf system-upgrade reboot
+ls -la *
+spotify &
+kill -o 6260
+kill -9 6260
+./popcorntime/
+cd ../bin-files/
+cd ../.local/
+cat .git
+cat .gitignore 
+cat README.md 
+cd .config/
+cd Popcorn-Time/
+cd .local/popcorntime-flatpak/
+cd .flatpak-builder/
+sudo find / -name sh.popcorn[D
+sudo find / -name popcorn
+find . -name popcorn
+find . -name popcorn*
+sudo find / -name popcorn*
+flatpak
+flatpak-builder 
+cd popcorntime-flatpak/
+cd 
+cat .bashrc 
+hfix 
+hfix
+xs torrent_config/
+cd torrent_config/
+cd bin
+mv -r popcorntime-flatpak/ back.popcorntime-flatpak/
+mv popcorntime-flatpak/ back.popcorntime-flatpak/
+flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+flatpak remote-info 
+git clone https://gitlab.com/Preisschild/popcorntime-flatpak
+cd ./popcorntime-flatpak/
+flatpak-builder --install --install-deps-from=flathub popcorntime sh.popcorntime.PopcornTime.yml
+cd var/
+run
+./run
+cd files/
+cd popcorntime/
+x11
+hsitory | grep tar
+history | grep tar
+tar xzf Popcorn-Time-0.3\ \(1\).10-Linux-64/
+rm 'Popcorn-Time-0.3 (1).10-Linux-64'/
+rm -r 'Popcorn-Time-0.3 (1).10-Linux-64'/
+ls -lat
+mkdir ~/.local/Popcorn.Time
+ls -la ~/.local/Popcorn.Time
+ls -la ~/.local/
+mkdir ~/.local/popcorn.time
+cp Popcorn-Time-0.3.10-Linux-64.tar.xz ~/.local/popcorn.time/
+cd ~/.local/popcorn.time/
+tar -xvf Popcorn-Time-0.3.10-Linux-64.tar.xz 
+./Popcorn-Time &
+sudo ./Popcorn-Time &
+su
+./Popcorn-Time 
+rm c*
+rm C*
+rm r*
+rm f*
+ls -la lib
+mkdir ~/src/cmake
+c[ mastering-cmake.pdf ~/src/cmake/
+cp mastering-cmake.pdf ~/src/cmake/
+cp mastering-cmake.pdf ~/books/
+rm m^
+rm m*
+rm n*
+rm -r n*
+rm -r l*
+rm i*
+rm -r s*
+rm LICENSE.txt 
+rm -r payload 
+rm -r pnacl/
+rm P*
+rm README.md 
+evince Yu-Linux-TSM2004.pdf 
+evince \[Evi_Nemeth\,_Garth_Snyder\,_Trent_R._Hein\]_UNIX_and\(BookFi\).pdf 
+mv \[Evi_Nemeth\,_Garth_Snyder\,_Trent_R._Hein\]_UNIX_and\(BookFi\).pdf Unix.and.Linux.Administration.pdf 
+cp Unix.and.Linux.Administration.pdf ~/books/
+rm Unix.and.Linux.Administration.pdf 
+ls -lan
+gnome-session
+cd Downloads/
+cat dunstrc1 
+sigrok
+cd cpp/
+./intro 
+systemctl --user restart emacs.service &
+sudo dnf downgrade --help\
+sudo dnf downgrade --help
+sudo reboot now\
+uname
+uname -a
+systemctl --user status rdm.service \
+rdma --version
+rtags
+rdm
+libclang
+sudo find / -name ibclang.so.7
+sudo find / -name libclang.so.7
+sudo find / -name libclang.so.
+sudo find / -name libclang.so.*
+cd .local/rtags/bin/\
+cd .local/rtags/bin/
+ls =la
+cat rdm 
+cd .local/
+cd rtags/
+systemctl --user status emacs.server
+kill -9 7666
+emacs &
+kill -9 7729
+sudo find / -name libclang
+ldconfig 
+sudo ldconfig 
+echo $LD_LIBRARY_PATH
+sudo echo $LD_LIBRARY_PATH
+cd src/cpp/
+cd lesson02/
+rm -r build/
+sudo ls
+sudo dnf install clang7.0-libs
+cat anatomy01.cpp
+sudo reboot now
+emacsclient .bashrc 
+emacsclient .bashrc &
+git commit -m "emacs company colors should return to default"
+gid diff
+git diff
+git diff init.el
+git diff ~/.emacs.d/init.el
+systemctl --user status rdm.se
+git status 
+git add .emacs.d/init.el 
+git commit -m "emacs seems to work ok now"
+git log
+history | grep git push
+history | grep "git push"
+git push origin master 
+cd networking/
+ls -la unix/
+mkdir ~/Documents/testa
+cp c/apue.3e/ ~/Documents/testa/
+cp -r c/apue.3e/ ~/Documents/testa/
+cd Documents/testa/
+cat README 
+gmake 
+gcc make
+gcc 
+gcc Makefile 
+make --version
+make CC=/usr/bin/gcc
+ls -la ~/src/c/apue.3e/
+ls datafiles/
+make .
+cat Make.defines.linux 
+sudo make
+pws
+maek apue.3e/
+make apue.3e/
+cd ../
+mkdir testb
+cd test
+cd testb
+git clone https://github.com/roktas/apue2e.git
+cd apue2e/
+ls -la include/
+touch /usr/include/stropts.h
+sudo touch /usr/include/stropts.h
+gmake
+sudo rm /usr/include/stropts.h
+cd testa
+cd apue.3e/
+make -v CC=/usr/bin/clang
+make CC=/usr/bin/clang -v
+make CC=/usr/bin/clang -V
+make CC=/usr/bin/clang
+ls stdio/
+ls filedir/
+cat filedir/access.c 
+ls lib/
+ls intro/
+./intro/hello 
+cd src/c
+rm -r apue.3e/
+evince C.Primer.Plus.6th.Edition.pdf &
+ls 
+ls ../lost+found/
+cd src/
+cd c
+rm apue.h 
+rm \#apue.h# 
+mv ch02_1.c ch02.1.c
+rm ch02_1.c~ 
+emacsclient ch02.1.c &
+emacsclient CMakeLists.txt 
+cat listing2_1.c 
+./ch02 
+./ch02
+./ch02.1 
+rm ch02
+curses
+sudo find / -name ccmake
+ls /usr/bin/ccmake
+cat ~/.bashrc 
+car ~/.Xresources
+cat ~/.Xresources
+emacsclient ~/.Xresources
+emacsclient ~/.Xresources &
+systemctl  --user  status  emacs.service 
+xrdb  .Xresources
+emacsclient -c .Xresources &
+cd src/c/ch02/
+tmux
+evince ../../C.Primer.Plus.6th.Edition.pdf 
+xrdb ~/.Xresources
+cd src/c/ch02/build/
+ccmake .
+evince ../../C.Primer.Plus.6th.Edition.pdf &
+touch ch02.2.c 
+rm listing2_1.c 
+ccmake\
+touch ch02.3.c
+sudo find / -name make.conf
+cat /proc/cpuinfo 
+cat /proc/cpuinfo | less
+sensors
+sensors | less
+mpstat
+sudo dnf install sysstat
+mpstat 
+mpstat -P all
+mpstat ss
+mpstat SCPU
+mpstat -P scpu
+mpstat -I SCPU
+mpstat -P SCPU
+mpstat -P SUM
+mpstat -I SUM
+mpstat -I CPU
+mpstat -I CPU | less
+mpstat -I CPUd
+mpstat -I CPU -N ALL
+mpstat -I SCPU -N ALL
+sar
+ps -eo pcpu,pid,user,args | sort -k 1 -r | head -10
+htop
+cat CMakeLists.txt
+cd build 
+./ch02.2
+cmake VERBOSE=1
+make clear
+cd CMakeFiles/
+systemctl --user status rdm.socket 
+./ch02.3
+cmake .
+less CMakeFiles/CMakeOutput.log 
+cmake
+cmake ..\
+evince ~/src/cmake/mastering-cmake.pdf 
+info registers
+alsamixer 
+make 99
+make g
+make -g
+evince ~/src/cmake/mastering-cmake.pdf &
+shos non-stop
+show non-stop
+touch ch02.ex3.c
+cd ..\
+cd ch02/
+gdb
+./ch02.ex3 
+evince ~/books/Vim-emacs/Mickey\ Petersen-Mastering\ Emacs\ \(2015\).pdf &
+mkdir ch03
+cp ch02/CMakeLists.txt ch03/
+cd ch03
+mkdir build
+cd build/
+systemctl --user status rdm.service 
+nm
+pwd
+nm -a -C ch03.1 
+ccmake
+ccmake ..
+make
+cmake ..
+make clean
+make VERBOSE=1
+./ch03.1 
+mpstat -I ALL
+amaz
+df
+top
+kill -30234
+kill -9 30234
+systemctl --user restart emacs.service 
+systemctl --user status emacs.service 
+ps
+emacsclient -c &
+cd src/unix/
+ls -la
+dmenu
+dmenu_run
+sudo dnf update
+find . -name cmake.ide
+cd
+find . -name cmake.ide.el
+find . -name *.el
+find . -name cmake-ide.el
+cat 
+cat ./.emacs.d/elpa/cmake-ide-20190515.927/cmake-ide.el
+clear
+git status
+git add .Xresources .bash_history .config/qutebrowser/bookmarks/urls .emacs.d/init.el 
+git add .Xresources .bash_history .emacs.d/init.el
+git -f add .Xresources .bash_history .emacs.d/init.el
