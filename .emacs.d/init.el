@@ -29,6 +29,7 @@
 (scroll-bar-mode -1)
 (tool-bar-mode -1)
 (global-display-line-numbers-mode)
+(defalias 'yes-or-no-p 'y-or-n-p)
 
 (use-package evil
   :ensure t)
@@ -48,6 +49,37 @@
 (use-package ace-window
   :ensure t
   :init (progn (global-set-key [remap other-window] 'ace-window)))
+(custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(default ((t (:inherit nil :stipple nil :background "#1E2326" :foreground "#DEDEDE" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 138 :width normal :foundry "ADBO" :family "Source Code Pro"))))
+ '(aw-leading-char-face ((t (:foreground "red" :bold t :height 2.5)))))
+
+					; easy spell check
+(global-set-key (kbd "<f8>") 'ispell-word)
+(global-set-key (kbd "C-S-<f8>") 'flyspell-mode)
+(global-set-key (kbd "C-M-<f8>") 'flyspell-buffer)
+(global-set-key (kbd "C-<f8>") 'flyspell-check-previous-highlighted-word)
+(defun flyspell-check-next-highlighted-word ()
+  "Custom function to spell check next highlighted word"
+  (interactive)
+  (flyspell-goto-next-error)
+  (ispell-word)
+  )
+(global-set-key (kbd "M-<f8>") 'flyspell-check-next-highlighted-word)
+
+(dolist (hook '(text-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode 1))))
+(dolist (hook '(change-log-mode-hook log-edit-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode -1))))
+(dolist (hook '(latex-mode-hook))
+  (add-hook hook (lambda () (flyspell-mode 1))))
+
+(setq TeX-parse-self t) ; Enable parse on load.
+(setq TeX-auto-save t) ; Enable parse on save.
+
 
 ;; org-mode
 (use-package org
@@ -183,6 +215,7 @@
   :init (global-company-mode))
 ;; courtesy of http://tuhdo.github.io/c-ide.html
 (add-to-list 'company-backends 'company-c-headers)
+(add-to-list 'company-backends 'company-c++-headers)
 
 
 ;; courtesy of http://tuhdo.github.io/c-ide.html
@@ -219,6 +252,10 @@
   (add-hook 'css-mode-hook  'emmet-mode) ;; enable Emmet's css abbreviation.
   (setq emmet-move-cursor-between-quotes t)) ;; default nil
 
+(use-package latex-preview-pane
+  :ensure t)
+(latex-preview-pane-enable)
+
 (use-package magit
   :ensure t
   :config
@@ -244,6 +281,8 @@
 ;;     `(company-tooltip-common ((t (:inherit font-lock-constant-face))))))
 ;; courtesy of https://www.emacswiki.org/emacs/CompanyMode page.
 
+
+
 ;;; Commentary:
 
 (custom-set-variables
@@ -262,12 +301,7 @@
  '(linum-format " %7i ")
  '(package-selected-packages
    (quote
-    (magit emmet-mode sublime-themes auto-complete-clang org-mode org-bullets which-key yasnippet-snippets yasnippet cmake-ide irony auto-package-update use-package flycheck rtags evil)))
+    (latex-preview-pane magit emmet-mode sublime-themes auto-complete-clang org-mode org-bullets which-key yasnippet-snippets yasnippet cmake-ide irony auto-package-update use-package flycheck rtags evil)))
  '(rtags-path "~/.local/rtags/bin/"))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#1E2326" :foreground "#DEDEDE" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 134 :width normal :foundry "PfEd" :family "DejaVu Sans Mono")))))
+
 ;;; init.el ends here
