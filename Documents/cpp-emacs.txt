@@ -1,0 +1,1027 @@
+popcorn
+https://gitlab.com/Preisschild/popcorntime-flatpak
+it was possible to install it by using that page instructions.
+flatpack-build and some other packages were installed in that process too
+
+flatpack & snap allowed me to install acestream and few more, can't remember which (keepass maybe)
+
+i3wm found this process after trying to run d-loaded torrent by clicking on it
+/app/popcorntime/Popcorn-Time --type=zygote --no-sandbox --enable-crash-reporter=, --user-data-dir=/home/zoran/.var/app/sh.popcorntime.PopcornTime/config/Popcorn-Time
+
+process of making emacs into c and c++ editor
+
+in short
+
+I had to install also all of these in order to get rid of error messages
+clang-devel (not sure if this one changed anything but kept it anyway)
+llvm-devel
+zlib-devel
+openssl-devel
+cppunit
+cppunit-devel
+
+then comes flycheck and rest of emacs packages
+
+
+CLANG & LLVM
+Use this pages for clang and llvm insallation, else you get errors if installing clang and llvm from dnf install command line.
+But in order to get it work
+install first clang sudo dnf install clang
+http://clang.llvm.org/get_started.html
+make takes long time. very long. Probably more than an hour.
+more than three hours in reality. very long.
+
+RTAGS
+https://github.com/Andersbakken/rtags/wiki/Installing-RTags
+https://github.com/Andersbakken/rtags
+Tried both ways to cmake and got errors realting to llvm-config and some cxx cmake flags.
+
+I finally got llvm-config. I needed to install llvm-devel instead of llvm. 
+By installing llvm-devel I got rid of llvm-config not found error and also smake falgs missing error
+I am still getting
+[zoran@workstation build]$ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 ..                                              
+CMake Error at src/CMakeLists.txt:88 (message):                                                                    
+  Failed to compile small clang test app.                                                                          
+                                                                                                                   
+  It's likely that the include file <clang-c/Index.h> could not be found!                                          
+                                                                                                                   
+  Maybe you need to install the clang development package?                                                         
+                                                                                                                   
+  See CMakeFiles/CMakeError.log for more info.                                                                     
+                                                                                                                   
+                                                                                                                   
+-- Configuring incomplete, errors occurred!    
+As explained in following text in order to get rid of that error I had to compile in rtags directory and not in rtags/build as I was trying.
+then I tried to install clang-devel package but error persits.
+clang-devel took very short time to install from web.I did not have to compile as when I installed clang.
+
+Moved away from build directory and ke  exaxtly as in
+https://github.com/Andersbakken/rtags#finding-clang
+Now it found the file but threw new errors/warnings
+
+- Could NOT find ZLIB (missing: ZLIB_LIBRARY ZLIB_INCLUDE_DIR)                                                    
+-- Checking for one of the modules 'zlib'                                                                          
+ZLIB Can't be found. Rct configured without zlib support                                                           
+-- Could NOT find OpenSSL, try to set the path to OpenSSL root folder in the system variable OPENSSL_ROOT_DIR (miss
+ing: OPENSSL_CRYPTO_LIBRARY OPENSSL_INCLUDE_DIR)                                                                   
+-- Checking for one of the modules 'openssl'                                                                       
+OPENSSL Can't be found. Rct configured without openssl support    
+
+Installed zlib-devel and got rid of zlib error but still there are errors
+-- Using Clang version 7.0.1 from /usr/lib64 with CXXFLAGS -I/usr/include -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D
+__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS                                                                         
+-- Found ZLIB: /usr/lib64/libz.so (found version "1.2.11")                                                         
+-- Could NOT find OpenSSL, try to set the path to OpenSSL root folder in the system variable OPENSSL_ROOT_DIR (miss
+ing: OPENSSL_CRYPTO_LIBRARY OPENSSL_INCLUDE_DIR) (found version "")                                                
+-- Checking for one of the modules 'openssl'                                                                       
+OPENSSL Can't be found. Rct configured without openssl support                                                     
+CMake Error at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:137 (message):                         
+  Could NOT find CPPUNIT (missing: CPPUNIT_LIBRARY CPPUNIT_INCLUDE_DIR)                                            
+Call Stack (most recent call first):                                                                               
+  /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)                        
+  src/rct/tests/FindCPPUNIT.cmake:21 (find_package_handle_standard_args)                                           
+  src/rct/tests/CMakeLists.txt:6 (find_package)                                                                    
+                                                                                                                   
+                                                                                                                   
+-- Configuring incomplete, errors occurred!                   
+
+openssl-devel was needed to get rid of openssl error message
+now i still have few erors
+CMake Error at /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:137 (message):                         
+  Could NOT find CPPUNIT (missing: CPPUNIT_LIBRARY CPPUNIT_INCLUDE_DIR)                                            
+Call Stack (most recent call first):                                                                               
+  /usr/share/cmake/Modules/FindPackageHandleStandardArgs.cmake:378 (_FPHSA_FAILURE_MESSAGE)                        
+  src/rct/tests/FindCPPUNIT.cmake:21 (find_package_handle_standard_args)                                           
+  src/rct/tests/CMakeLists.txt:6 (find_package)                                                                    
+                                                                                                                   
+                                                                                                                   
+-- Configuring incomplete, errors occurred!   
+
+And then finally
+I installed cppunit and cppunit-devel (in that order since i had trouble finding cppunit-devel cause i foolishly searched for cppunit-dev)
+But after it i tried cmake again and it worked
+
+[zoran@workstation rtags]$ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 .                                               
+-- Using Clang version 7.0.1 from /usr/lib64 with CXXFLAGS -I/usr/include -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D
+__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS                                                                         
+-- Found CPPUNIT: /usr/lib64/libcppunit.so                                                                         
+-- Found emacs version 26.1                                                                                        
+CMake Warning at CMakeLists.txt:107 (message):                                                                     
+  Nosetests executable not found! Excluding automated_tests from tests.                                            
+                                                                                                                   
+                                                                                                                   
+-- The following OPTIONAL packages have been found:                                                                
+                                                                                                                   
+ * ZLIB                                                                                                            
+ * OpenSSL                                                                                                         
+ * PkgConfig, helper tool, <https://www.freedesktop.org/wiki/Software/pkg-config/>                                 
+   We use it to get the bash completion installation path, and replace the prefix with the value of CMAKE_INSTALL_P
+REFIX.                                                                                                             
+ * Perl                                                                                                            
+                                                                                                                   
+-- The following REQUIRED packages have been found:                                                                
+                                                                                                                   
+ * LibClang                                                                                                        
+ * CPPUNIT                                                                                                         
+                                                                                                                   
+-- Configuring done                                                                                                
+-- Generating done                                                                                                 
+-- Build files have been written to: /home/zoran/.local/rtags                                                      
+[zoran@workstation rtags]$              
+
+Last one missing was python2-nose
+sudo dnf install python2-nose
+and result is
+[zoran@workstation rtags]$ cmake -DCMAKE_EXPORT_COMPILE_COMMANDS=1 .                                               
+-- Using Clang version 7.0.1 from /usr/lib64 with CXXFLAGS -I/usr/include -D_GNU_SOURCE -D__STDC_CONSTANT_MACROS -D
+__STDC_FORMAT_MACROS -D__STDC_LIMIT_MACROS                                                                         
+-- Found emacs version 26.1                                                                                        
+-- The following OPTIONAL packages have been found:                                                                
+                                                                                                                   
+ * ZLIB                                                                                                            
+ * OpenSSL                                                                                                         
+ * PkgConfig, helper tool, <https://www.freedesktop.org/wiki/Software/pkg-config/>                                 
+   We use it to get the bash completion installation path, and replace the prefix with the value of CMAKE_INSTALL_P
+REFIX.                                                                                                             
+ * Perl                                                                                                            
+                                                                                                                   
+-- The following REQUIRED packages have been found:                                                                
+                                                                                                                   
+ * LibClang                                                                                                        
+ * CPPUNIT                                                                                                         
+                                                                                                                   
+-- Configuring done                                                                                                
+-- Generating done                                                                                                 
+-- Build files have been written to: /home/zoran/.local/rtags                                                      
+[zoran@workstation rtags]$      
+
+!!!How am I ever to upgrade this?
+And I just finished rtags cmake.
+make finished in short time. Not like for llvm.
+
+I followed through the rest of
+https://github.com/Andersbakken/rtags
+and managd to use rtags-find-reference on the file provided. Well at least I managed to use it somewhat, I don't really understand yet how to navigate through.
+
+installed flycheck through use-package in emace, but did not configure any sytax checking 
+
+did not install auto-complete-clang
+
+Installed company and now i have what looks to me as completion.
+
+suffering with levenshtein-0 dependency. 
+https://github.com/atilaneves/cmake-ide/issues/66
+I needed melpa instead of stable melpa repository and levenshtein was installed
+
+I guess next is CMake.
+
+I did not install rtags?!?! wtf But then I get some mismatch rdm and rc....
+It looks I did not have to since I installed one from github and it is in ~/.local/rtags/bin/rdm
+
+
+Managed to get rdm.socket to listen but stil rdm.service does not start
+Followd systemd configuration in https://github.com/Andersbakken/rtags/wiki/Setup
+and added few lines in ~./bashrc
+RDM=/home/.local/rtags/bin/rdm
+export RDM
+
+When starting emacs with auto start rdm option (rtags-start-process-unless-running) I get an error
+Warning (initialization): An error occurred while loading ‘/home/zoran/.emacs.d/init.el’:
+
+error: RTags: Can’t start the process ‘nil’. Please check the value of the variables ‘rtags-path’ and ‘rtags-rdm-binary-name’.
+
+To ensure normal operation, you should investigate and remove the
+cause of the error in your initialization file.  Start Emacs with
+the ‘--debug-init’ option to view a complete error backtrace.
+
+I will try to change this variable in rtags.el file
+(defcustom rtags-path nil
+  "Path to RTags executables."
+  :type '(choice (const :tag "Unset" nil) directory)
+  :risky t
+Changed rtags-path variable in rtags.el to ~/.config/systemd/user/rdm.service and it works now.
+check what actually works
+~/.local/rtags/bin worked as rtags-path variable invoked with C-h v
+and in 
+(defcustom rtags-path nil
+is
+(defcustom rtags-path t
+now
+
+
+Irony was not working as expected
+i had to add lines
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'objc-mode-hook 'irony-mode)
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+from https://github.com/Sarcasm/irony-mode
+and build irony-server with M-x irony-install-server
+
+Could not get normal looking completion so I installed yasnippet and yasnippet-snippets
+Well, I got some C/C++ definitions but I am not sure that is it.
+Actually after adding some lines in init.el (load-path) it looked somewhat better with .c and .cpp test file. 
+
+I finally instaled auto-complete-clang and followed instructions on web page https://github.com/brianjcj/auto-complete-clang
+Not sure if I needed 
+(setq ac-clang-flags
+      (mapcar (lambda (item)(concat "-I" item))
+              (split-string
+               "
+ /usr/include/c++/4.6
+ /usr/include/c++/4.6/x86_64-linux-gnu/.
+ /usr/include/c++/4.6/backward
+ /usr/lib/gcc/x86_64-linux-gnu/4.6.1/include
+ /usr/local/include
+ /usr/lib/gcc/x86_64-linux-gnu/4.6.1/include-fixed
+ /usr/include/x86_64-linux-gnu
+ /usr/include
+"
+               )))
+part since originally i wrote wrong header and it was not recognized but let it be for now.
+
+!!!!!!!!!!!!!!!!!!!!!!
+CMake YT video
+https://www.youtube.com/watch?v=HPMvU64RUTY
+
+CapsLock in i3
+Had to change ~/.Xmodmap and add text found on Arch web site.
+I also changed dip-switch on keyboard as well as changed key-cap, so instead of Caps_Lock now it is written Ctrl.
+
+
+Mapped volume keys in ~/.config/i3/config file.
+
+
+Added this to yasnippet config in ~/.emacs.d/init.el and got C header completion.
+courtesy of this link https://www.youtube.com/watch?v=HTUE03LnaXA
+(defun my:ac-c-header-init ()
+  (require 'auto-complete-c-headers)
+  (add-to-list 'ac-sources 'ac-source-c-headers)
+  (add-to-list 'achead:include-directories '"/usr/lib/gcc/x86_64-redhat-linux/8/include") 
+  (add-to-list 'achead:include-directories '"/usr/local/include")
+  (add-to-list 'achead:include-directories '"/usr/include")
+  (add-hook 'c-mode-hook 'my:ac-c-header-init))
+
+(defun my:ac-c++-header-init ()
+  (require 'auto-complete-c++-headers)
+  (add-to-list 'achead:include-directories '"/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8")
+  (add-to-list 'achead:include-directories '"/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/x86_64-redhat-linux")
+  (add-to-list 'achead:include-directories '"/usr/lib/gcc/x86_64-redhat-linux/8/../../../../include/c++/8/backward")
+  (add-to-list 'achead:include-directories '"/usr/lib/gcc/x86_64-redhat-linux/8/include")
+  (add-to-list 'achead:include-directories '"/usr/local/include")
+  (add-to-list 'achead:include-directories '"/usr/include")
+  (add-hook 'c++-mode-hook 'my:ac-c++-header-init))
+
+
+Safire was recognized, but profile given was 7.1 instead of stereo so some sources do not work correctly.
+pacmd command was first to use https://www.linuxquestions.org/questions/linux-hardware-18/my-external-sound-card-is-recognized-as-speaker-but-not-mike-4175626011/
+
+Following page has a howto for focusrite problem reg. stereo output. 
+https://askubuntu.com/questions/450489/pulseaudio-card-profile-for-focusrite-scarlett-18i8
+
+Yes you can create a pulseaudio profile to get the Focusrite 18i8 working in stereo.
+
+Create the file /lib/udev/rules.d/91-pulseaudio.rules:
+
+SUBSYSTEM!="sound", GOTO="pulseaudio1_end"
+ACTION!="change", GOTO="pulseaudio1_end"
+KERNEL!="card*", GOTO="pulseaudio1_end"
+
+SUBSYSTEMS=="usb", ATTRS{idVendor}=="1235", ATTRS{idProduct}=="8014", ENV{PULSE_PROFILE_SET}="focusrite-18i8.conf"
+
+LABEL="pulseaudio1_end"
+And create the file /usr/share/pulseaudio/alsa-mixer/profile-sets/focusrite-18i8.conf:
+
+[General]
+auto-profiles = no
+
+[Mapping analog-out]
+description = Analog Outputs
+device-strings = hw:%f
+channel-map = left,right,aux0,aux1,aux2,aux3,aux4,aux5
+direction = output
+
+[Mapping analog-in]
+description = Analog Inputs
+device-strings = hw:%f
+channel-map = left,right,aux0,aux1,aux2,aux3,aux4,aux5,aux6,aux7,aux8,aux9,aux10,aux11,aux12,aux13,aux14,aux15
+direction = input
+
+[Profile output:analog-out+input:analog-in]
+description = Analog Stereo
+output-mappings = analog-out
+input-mappings = analog-in
+Then either restart the machine or run the commands:
+
+sudo udevadm trigger -ssound
+
+pulseaudio -k
+
+In response to @Sneetsher: The Focusrite Scarlett 18i8 now seems to work well with Linux 3.19 and newer. The internal mixer can be configured with alsamixer and the settings can be saved using sudo alsactl store. It is also possible to change other settings (such as the impedance of the inputs between instrument (Hi-Z) and line level, or to switch the inputs' pad between 0 and -10dB) using alsamixer.
+
+!!!! sudo and su take 25 seconds delay
+searched left and right and it looks that for some reason i had 8 failed services
+dbus.message.service was disabled for few weeks already
+journalctl /usr/bin/dbus-daemon
+[zoran@workstation ~]$ systemctl status dbus-daemon.service 
+● dbus-daemon.service - D-Bus System Message Bus
+   Loaded: loaded (/usr/lib/systemd/system/dbus-daemon.service; disabled; vendor preset: disabled)
+   Active: inactive (dead)
+     Docs: man:dbus-daemon(1)
+[zoran@workstation ~]$ 
+it means it is still down. and log is not populated since 
+tried to start it but it failed
+[root@workstation zoran]# systemctl status dbus-daemon.service 
+● dbus-daemon.service - D-Bus System Message Bus
+   Loaded: loaded (/usr/lib/systemd/system/dbus-daemon.service; disabled; vendor preset: disabled)
+   Active: failed (Result: exit-code) since Wed 2019-06-05 04:04:09 CEST; 2min 30s ago
+     Docs: man:dbus-daemon(1)
+  Process: 6191 ExecStart=/usr/bin/dbus-daemon --system --address=systemd: --nofork --nopidfile --systemd-activation --syslog-only (code=exited, status=1/FAILURE)
+ Main PID: 6191 (code=exited, status=1/FAILURE)
+
+Jun 05 04:04:09 workstation.localdomain systemd[1]: Started D-Bus System Message Bus.
+Jun 05 04:04:09 workstation.localdomain dbus-daemon[6191]: Failed to start message bus: No socket received.
+Jun 05 04:04:09 workstation.localdomain systemd[1]: dbus-daemon.service: Main process exited, code=exited, status=1/FAILURE
+Jun 05 04:04:09 workstation.localdomain systemd[1]: dbus-daemon.service: Failed with result 'exit-code'.
+[root@workstation zoran]# 
+
+May 18 18:11:06 workstation.localdomain dbus-daemon[1045]: [system] Reloaded configuration
+in any case i put selinux in permissive mode and it all works now
+still do not know about that log up there.
+strace sudo still shows errors (not surprising)
+https://hansdegoede.livejournal.com/20910.html
+if it remains unsolved I will have to revisit it and solve it as in following address. 
+https://fedoraproject.org/wiki/Common_F30_bugs#Multiple_services_fail_to_start_with_.22status.3D226.2FNAMESPACE.22_in_unusual_cases
+!!!!!!!
+
+
+one about proxmox server
+mount -t ntfs /dev/sdf2 /mnt/ntfsdrive
+was enough to mount windows disk under the proxmox debianlinux
+sudo mkdir /mnt/ntfsdrive
+sudo mount -t ntfs /dev/sdaX /mnt/ntfsdrive
+is from https://www.linuxquestions.org/questions/linux-newbie-8/how-to-mount-the-ntfs-filesystem-916117/
+
+sas2008 lsi20118i boot to uefi and execute following commands to first delete existing firmware and then to flash new one
+sas2flash.efi -o -s 6
+sas2flash.efi -o -f <flash.bin> -b <bios.rom> 
+when you do same next time, enable logging and post the whole operation
+from supermicro https://www.supermicro.com/support/faqs/faq.cfm?faq=14716
+https://wiki.hackspherelabs.com/index.php?title=LSI_Raid_Firmware_Bios_Flashing
+
+!!!Linux bridge
+create bridge. brctl
+remove dhcp and consequently address from interface. ifconfig <ifname> 0
+add that interface to bridge. brctl addif <bridge name> <if name>
+enable dhcpclient on bridge. dhclient <bridge name>
+check ipconfig
+add that bridge as interface in vm and vm becomes part of your home network
+
+!!! about sigrok and pulseview
+I had to install proprietary sigrok firmware since I could no power my board with
+dnf install sigrok-firmware-fx2lafw from https://apps.fedoraproject.org/packages/sigrok-firmware-fx2lafw
+
+I had to use sigrok-fwextract-saleae-logic16 file (create and write it) in order to extract firmware from sealae sw Logic+1.1.34+(64-bit).zip
+parseelf.py had to be created as well.
+Then was Logic directory copied to /usr/share/sigrok-firmware folder and sigrok-firmware-fx2lafw Logic command executed.
+why i used older software saelase https://sigrok.org/bugzilla/show_bug.cgi?id=989
+from https://support.saleae.com/logic-software/legacy-software/older-software-releases
+and finally this is what I downloaded in order to extract the firmware https://sigrok.org/gitweb/?p=sigrok-util.git;a=tree;f=firmware/saleae-logic16;h=4599fd9bda1f547957c9ea5bf69c980b80110029;hb=HEAD
+some more info https://sigrok.org/wiki/Saleae_Logic16/Firmware
+and some more https://sigrok.org/wiki/Saleae_Logic16#Firmware where under Firmware heading is explanation how to extract that mentioned proprietary firmware.
+Following is original page describing free software capabilities https://sigrok.org/wiki/Fx2lafw and here I can see that saleae19 is not supported, but saleae8 seem to be OK. So that is probably what I have to buy in order to make video as help for the course.
+!!!!!!!!!!
+Take a look here https://sigrok.org/wiki/Mcupro_Logic16_clone#Firmware
+It might be possible to avoid proprietary software. Look at the bottom of the page, renaming the firmware.
+Must check, but might still have to purchase cheaper solutions since this one (100 MHz that I have) is around 500 SEK plus.
+!!!!!!!!!!!
+
+Adding second GPU
+Use radeon.si_support=0 amdgpu.si_support=1 to override.
+that was message found in dmesg command. other usefull commands
+tree /sys/bus/pci/drivers/amdgpu/
+tree /sys/bus/pci/drivers/radeon/
+lspci -vnn | grep VGA -A24
+echo -n "0000:08:00.0" > /sys/bus/pci/drivers/radeon/unbind  !!this worked only when i disabled windows manager with opened ctrl-alt-3 or so
+systemctl stop gd then tab I think
+but still could not assign (bind) to new driver
+echo -n "0000:08:00.0" > /sys/bus/pci/drivers/amdgpu/bind
+
+Now check if
+Use radeon.si_support=0 amdgpu.si_support=1 to override.
+is all that is needed.
+radeon.si_support=0 amdgpu.si_support=1
+GRUB_CMDLINE_LINUX_DEFAULT="radeon.si_support=0 amdgpu.si_support=1"
+
+[root@workstation fedora]# cat /etc/default/grub
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+GRUB_CMDLINE_LINUX_DEFAULT="radeon.si_support=0 amdgpu.si_support=1"
+GRUB_DEFAULT=saved
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL_OUTPUT="console"
+GRUB_CMDLINE_LINUX="resume=UUID=abb37e25-3606-47b4-a1ee-b5f7767ea357 rhgb quiet"
+GRUB_DISABLE_RECOVERY="true"
+GRUB_ENABLE_BLSCFG=true
+[root@workstation fedora]# 
+
+
+GRUB_CMDLINE_LINUX_DEFAULT="radeon.si_support=0 amdgpu.si_support=1"
+grub2-mkconfig -o /boot/efi/EFI/fedora/grub.cfg  !!!ths is for updating grub on fedora (strange people, making it more difficult than needed)
+It worked.
+end GPU
+next is how to force output to new (second) card for the host and leave original card for guests on the system.
+I connected cables to the card and output started just fine but disappeared once I logged in i3wm
+
+
+following is from https://unix.stackexchange.com/questions/16407/how-to-check-which-gpu-is-active-in-linux
+following output shows which card is in charge
+[zoran@workstation ~]$ glxinfo|egrep "OpenGL vendor|OpenGL renderer"
+OpenGL vendor string: X.Org
+OpenGL renderer string: Radeon RX 580 Series (POLARIS10, DRM 3.30.0, 5.1.8-300.fc30.x86_64, LLVM 8.0.0)
+[zoran@workstation ~]$ 
+
+and following shows that both cards are active since both have [VGA controller] at the end of output
+[zoran@workstation ~]$ lspci -vnnn | perl -lne 'print if /^\d+\:.+(\[\S+\:\S+\])/' | grep VGA
+08:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Pitcairn PRO [Radeon HD 7850 / R7 265 / R9 270 1024SP] [1002:6819] (prog-if 00 [VGA controller])
+42:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Ellesmere [Radeon RX 470/480/570/570X/580/580X/590] [1002:67df] (rev e7) (prog-if 00 [VGA controller])
+[zoran@workstation ~]$ 
+
+So what is left is to figure out how to change one in charge to the other one. 
+
+Guess what, "Southern Islands" graphics processor (which is the gpu in question) has only experimental support in amdgpu driver. It looks if I wish to use that card as main Linux card I will have to switch back to radeon driver. Or maybe i can first try to pass that card to Windows 10 and or whatever else OS I might be using with that card. 
+
+
+dnf groupinstall "Development Tools" "Development Libraries"
+sudo dnf install git SDL2-devel SDL2_ttf-devel openssl-devel spice-protocol fontconfig-devel libX11-devel gnu-free-mono-fonts ivshmem-tools mesa-libGL-devel mesa-libGLU-devel
+
+CHANGES, CHANGES!!!
+I followed
+https://www.youtube.com/watch?v=Df0QooIV83A  mostly
+but used arch recommended link (recommended from looking glass site) and got bit confused. It looks to me they lack real howto and I did not apply their vfio.conf file since it looks I achieved needed by pci-stub entry in grub. 
+I also looked at https://www.youtube.com/watch?v=3yhwJxWSqXI&t=624s but did not really follow his path besides I think iommu=1 entry in grub.
+I changed the grub file
+First. I added iommu=1 amd_iommu=ON rebuild the grub and reboted.
+Second. Removed the entry relating to radeon vs amdgpu driver rebuild grub and rebooted. Result was that Radeon 7850 got radeon driver back.
+Third. Added entry to block 7850
+This is how grub looks after that. Of course I rebuilt it and reboot it and result is also visible, 
+[root@workstation zoran]# cat /etc/default/grub
+GRUB_TIMEOUT=5
+GRUB_DISTRIBUTOR="$(sed 's, release .*$,,g' /etc/system-release)"
+GRUB_CMDLINE_LINUX_DEFAULT="iommu=1 amd_iommu=on iommu=pt"
+GRUB_DEFAULT=saved
+GRUB_DISABLE_SUBMENU=true
+GRUB_TERMINAL_OUTPUT="console"
+GRUB_CMDLINE_LINUX="resume=UUID=abb37e25-3606-47b4-a1ee-b5f7767ea357 rhgb quiet pci-stub.ids=1002:6819,1002:aab0"
+GRUB_DISABLE_RECOVERY="true"
+GRUB_ENABLE_BLSCFG=true
+
+radeon7850 is using pci-stub driver. And I think it is exactly what i need. 
+[root@workstation zoran]# lspci -vnn | grep VGA -A25
+08:00.0 VGA compatible controller [0300]: Advanced Micro Devices, Inc. [AMD/ATI] Pitcairn PRO [Radeon HD 7850 / R7 265 / R9 270 1024SP] [1002:6819] (prog-if 00 [VGA controller])
+	Subsystem: PC Partner Limited / Sapphire Technology Radeon HD 7850 2GB GDDR5 DVI-I/DVI-D/HDMI/DP [174b:e221]
+	Flags: fast devsel, IRQ 11, NUMA node 0
+	Memory at c0000000 (64-bit, prefetchable) [disabled] [size=256M]
+	Memory at d9f00000 (64-bit, non-prefetchable) [disabled] [size=256K]
+	I/O ports at 3000 [disabled] [size=256]
+	Expansion ROM at d9f40000 [disabled] [size=128K]
+	Capabilities: [48] Vendor Specific Information: Len=08 <?>
+	Capabilities: [50] Power Management version 3
+	Capabilities: [58] Express Legacy Endpoint, MSI 00
+	Capabilities: [a0] MSI: Enable- Count=1/1 Maskable- 64bit+
+	Capabilities: [100] Vendor Specific Information: ID=0001 Rev=1 Len=010 <?>
+	Capabilities: [150] Advanced Error Reporting
+	Capabilities: [270] Secondary PCI Express <?>
+	Capabilities: [2b0] Address Translation Service (ATS)
+	Capabilities: [2c0] Page Request Interface (PRI)
+	Capabilities: [2d0] Process Address Space ID (PASID)
+	Kernel driver in use: pci-stub
+	Kernel modules: radeon, amdgpu
+
+I should check if I am ready for looking glass installation
+
+dnf groupinstall "Development Tools" "Development Libraries"
+sudo dnf install git SDL2-devel SDL2_ttf-devel openssl-devel spice-protocol fontconfig-devel libX11-devel gnu-free-mono-fonts ivshmem-tools mesa-libGL-devel mesa-libGLU-devel
+
+Following is in case I need to remove some of these packages...so I can see what are those that were installed by following command.
+[root@workstation client]# dnf install git SDL2-devel SDL2_ttf-devel openssl-devel spice-protocol fontconfig-devel libX11-devel gnu-free-mono-fonts ivshmem-tools mesa-libGL-devel mesa-libGLU-devel
+Docker CE Stable - x86_64                                                                                                                                                           1.8 kB/s | 577  B     00:00    
+Failed to synchronize cache for repo 'docker-ce-stable'
+Ignoring repositories: docker-ce-stable
+Last metadata expiration check: 0:07:35 ago on Sat 22 Jun 2019 02:24:35 AM CEST.
+Package git-2.21.0-1.fc30.x86_64 is already installed.
+Package openssl-devel-1:1.1.1c-2.fc30.x86_64 is already installed.
+Package gnu-free-mono-fonts-20120503-20.fc30.noarch is already installed.
+Dependencies resolved.
+====================================================================================================================================================================================================================
+ Package                                                 Architecture                              Version                                                         Repository                                  Size
+====================================================================================================================================================================================================================
+Installing:
+ fontconfig-devel                                        x86_64                                    2.13.1-8.fc30                                                   updates                                    128 k
+ ivshmem-tools                                           x86_64                                    2:3.1.0-8.fc30                                                  updates                                     62 k
+ mesa-libGL-devel                                        x86_64                                    19.0.6-1.fc30                                                   updates                                    162 k
+ spice-protocol                                          noarch                                    0.14.0-1.fc30                                                   updates                                     31 k
+ SDL2-devel                                              x86_64                                    2.0.9-3.fc30                                                    fedora                                     256 k
+ SDL2_ttf-devel                                          x86_64                                    2.0.15-2.fc30                                                   fedora                                      12 k
+ mesa-libGLU-devel                                       x86_64                                    9.0.0-17.fc30                                                   fedora                                      13 k
+Installing dependencies:
+ libdrm-devel                                            x86_64                                    2.4.98-1.fc30                                                   updates                                    147 k
+ mesa-khr-devel                                          x86_64                                    19.0.6-1.fc30                                                   updates                                     19 k
+ mesa-libEGL-devel                                       x86_64                                    19.0.6-1.fc30                                                   updates                                     33 k
+ mesa-libGLES                                            x86_64                                    19.0.6-1.fc30                                                   updates                                     15 k
+ mesa-libGLES-devel                                      x86_64                                    19.0.6-1.fc30                                                   updates                                     60 k
+ SDL2_ttf                                                x86_64                                    2.0.15-2.fc30                                                   fedora                                      23 k
+ bzip2-devel                                             x86_64                                    1.0.6-29.fc30                                                   fedora                                     215 k
+ expat-devel                                             x86_64                                    2.2.6-2.fc30                                                    fedora                                      49 k
+ freetype-devel                                          x86_64                                    2.9.1-7.fc30                                                    fedora                                     441 k
+ gl-manpages                                             noarch                                    1.1-18.20190306.fc30                                            fedora                                     1.0 M
+ libX11-devel                                            x86_64                                    1.6.7-1.fc30                                                    fedora                                     974 k
+ libXau-devel                                            x86_64                                    1.0.9-1.fc30                                                    fedora                                      14 k
+ libXdamage-devel                                        x86_64                                    1.1.4-16.fc30                                                   fedora                                     9.5 k
+ libXext-devel                                           x86_64                                    1.3.3-11.fc30                                                   fedora                                      73 k
+ libXfixes-devel                                         x86_64                                    5.0.3-9.fc30                                                    fedora                                      12 k
+ libXxf86vm-devel                                        x86_64                                    1.1.4-11.fc30                                                   fedora                                      18 k
+ libglvnd-core-devel                                     x86_64                                    1:1.1.0-4.gitf92208b.fc30                                       fedora                                      20 k
+ libglvnd-devel                                          x86_64                                    1:1.1.0-4.gitf92208b.fc30                                       fedora                                      12 k
+ libglvnd-opengl                                         x86_64                                    1:1.1.0-4.gitf92208b.fc30                                       fedora                                      37 k
+ libpng-devel                                            x86_64                                    2:1.6.36-1.fc30                                                 fedora                                     307 k
+ libxcb-devel                                            x86_64                                    1.13.1-2.fc30                                                   fedora                                     1.1 M
+ xorg-x11-proto-devel                                    noarch                                    2018.4-3.fc30                                                   fedora                                     280 k
+
+Transaction Summary
+====================================================================================================================================================================================================================
+Install  29 Packages
+
+Total download size: 5.4 M
+Installed size: 16 M
+Is this ok [y/N]: n
+Operation aborted.
+[root@workstation client]# 
+
+after installation I got
+Installed:
+  fontconfig-devel-2.13.1-8.fc30.x86_64                ivshmem-tools-2:3.1.0-8.fc30.x86_64                   mesa-libGL-devel-19.0.6-1.fc30.x86_64       spice-protocol-0.14.0-1.fc30.noarch                      
+  SDL2-devel-2.0.9-3.fc30.x86_64                       SDL2_ttf-devel-2.0.15-2.fc30.x86_64                   mesa-libGLU-devel-9.0.0-17.fc30.x86_64      libdrm-devel-2.4.98-1.fc30.x86_64                        
+  mesa-khr-devel-19.0.6-1.fc30.x86_64                  mesa-libEGL-devel-19.0.6-1.fc30.x86_64                mesa-libGLES-19.0.6-1.fc30.x86_64           mesa-libGLES-devel-19.0.6-1.fc30.x86_64                  
+  SDL2_ttf-2.0.15-2.fc30.x86_64                        bzip2-devel-1.0.6-29.fc30.x86_64                      expat-devel-2.2.6-2.fc30.x86_64             freetype-devel-2.9.1-7.fc30.x86_64                       
+  gl-manpages-1.1-18.20190306.fc30.noarch              libX11-devel-1.6.7-1.fc30.x86_64                      libXau-devel-1.0.9-1.fc30.x86_64            libXdamage-devel-1.1.4-16.fc30.x86_64                    
+  libXext-devel-1.3.3-11.fc30.x86_64                   libXfixes-devel-5.0.3-9.fc30.x86_64                   libXxf86vm-devel-1.1.4-11.fc30.x86_64       libglvnd-core-devel-1:1.1.0-4.gitf92208b.fc30.x86_64     
+  libglvnd-devel-1:1.1.0-4.gitf92208b.fc30.x86_64      libglvnd-opengl-1:1.1.0-4.gitf92208b.fc30.x86_64      libpng-devel-2:1.6.36-1.fc30.x86_64         libxcb-devel-1.13.1-2.fc30.x86_64                        
+  xorg-x11-proto-devel-2018.4-3.fc30.noarch           
+
+Complete!
+[root@workstation client]# 
+
+I tried cloning and d-loading individual files but errors ensued. 
+-- GMP libs: GMP_LIBRARIES-NOTFOUND GMPXX_LIBRARIES-NOTFOUND
+-- Could NOT find GMP (missing: GMP_INCLUDE_DIR GMP_LIBRARIES) 
+-- Checking for modules 'spice-protocol;nettle;hogweed'
+--   Package 'nettle', required by 'virtual:world', not found
+--   Package 'hogweed', required by 'virtual:world', not found
+
+[root@workstation build]# cmake ../
+-- The C compiler identification is GNU 9.1.1
+-- Check for working C compiler: /usr/bin/cc
+-- Check for working C compiler: /usr/bin/cc -- works
+-- Detecting C compiler ABI info
+-- Detecting C compiler ABI info - done
+-- Detecting C compile features
+-- Detecting C compile features - done
+-- Performing Test COMPILER_SUPPORTS_MARCH_NATIVE
+-- Performing Test COMPILER_SUPPORTS_MARCH_NATIVE - Success
+-- Found PkgConfig: /usr/bin/pkg-config (found version "1.6.1") 
+-- Checking for modules 'sdl2;x11'
+--   Found sdl2, version 2.0.9
+--   Found x11, version 1.6.7
+-- GMP libs: GMP_LIBRARIES-NOTFOUND GMPXX_LIBRARIES-NOTFOUND
+-- Could NOT find GMP (missing: GMP_INCLUDE_DIR GMP_LIBRARIES) 
+-- Checking for modules 'spice-protocol;nettle;hogweed'
+--   Package 'nettle', required by 'virtual:world', not found
+--   Package 'hogweed', required by 'virtual:world', not found
+CMake Error at /usr/share/cmake/Modules/FindPkgConfig.cmake:457 (message):
+  A required package was not found
+Call Stack (most recent call first):
+  /usr/share/cmake/Modules/FindPkgConfig.cmake:642 (_pkg_check_modules_internal)
+  spice/CMakeLists.txt:5 (pkg_check_modules)
+
+
+CMake Error: The following variables are used in this project, but they are set to NOTFOUND.
+Please set them or make sure they are set and tested correctly in the CMake files:
+GMP_INCLUDE_DIR (ADVANCED)
+   used as include directory in directory /root/LookingGlass/client
+   used as include directory in directory /root/LookingGlass/client
+   used as include directory in directory /root/LookingGlass/common
+   used as include directory in directory /root/LookingGlass/common
+   used as include directory in directory /root/LookingGlass/common
+   used as include directory in directory /root/LookingGlass/client/spice
+   used as include directory in directory /root/LookingGlass/client/spice
+GMP_LIBRARIES (ADVANCED)
+    linked by target "lg_common" in directory /root/LookingGlass/common
+
+-- Configuring incomplete, errors occurred!
+See also "/root/LookingGlass/client/build/CMakeFiles/CMakeOutput.log".
+
+
+I tried installing following as well.
+dnf group install "D Development Tools and Libraries"
+Docker CE Stable - x86_64                                                                                                                                                           1.3 kB/s | 577  B     00:00    
+Failed to synchronize cache for repo 'docker-ce-stable'
+Ignoring repositories: docker-ce-stable
+Last metadata expiration check: 0:53:54 ago on Sat 22 Jun 2019 02:24:35 AM CEST.
+Dependencies resolved.
+====================================================================================================================================================================================================================
+ Package                                                   Architecture                                  Version                                                Repository                                     Size
+====================================================================================================================================================================================================================
+Installing group/module packages:
+ indent                                                    x86_64                                        2.2.12-3.fc30                                          fedora                                        177 k
+ ldc                                                       x86_64                                        1:1.15.0-1.fc30                                        fedora                                        2.0 M
+Installing dependencies:
+ ldc-druntime                                              x86_64                                        1:1.15.0-1.fc30                                        fedora                                        525 k
+ ldc-druntime-devel                                        x86_64                                        1:1.15.0-1.fc30                                        fedora                                        993 k
+ ldc-jit                                                   x86_64                                        1:1.15.0-1.fc30                                        fedora                                        9.7 M
+ ldc-jit-devel                                             x86_64                                        1:1.15.0-1.fc30                                        fedora                                         13 k
+ ldc-phobos                                                x86_64                                        1:1.15.0-1.fc30                                        fedora                                        2.1 M
+ ldc-phobos-devel                                          x86_64                                        1:1.15.0-1.fc30                                        fedora                                        1.8 M
+Installing Groups:
+ D Development Tools and Libraries                                                                                                                                                                                 
+
+Transaction Summary
+====================================================================================================================================================================================================================
+Install  8 Packages
+
+Total download size: 17 M
+Installed size: 86 M
+Is this ok [y/N]: y
+Downloading Packages:
+(1/8): indent-2.2.12-3.fc30.x86_64.rpm                                                                                                                                              997 kB/s | 177 kB     00:00    
+(2/8): ldc-druntime-1.15.0-1.fc30.x86_64.rpm                                                                                                                                        2.4 MB/s | 525 kB     00:00    
+(3/8): ldc-druntime-devel-1.15.0-1.fc30.x86_64.rpm                                                                                                                                  5.7 MB/s | 993 kB     00:00    
+(4/8): ldc-1.15.0-1.fc30.x86_64.rpm                                                                                                                                                 5.3 MB/s | 2.0 MB     00:00    
+(5/8): ldc-jit-devel-1.15.0-1.fc30.x86_64.rpm                                                                                                                                       219 kB/s |  13 kB     00:00    
+(6/8): ldc-phobos-devel-1.15.0-1.fc30.x86_64.rpm                                                                                                                                    9.0 MB/s | 1.8 MB     00:00    
+(7/8): ldc-phobos-1.15.0-1.fc30.x86_64.rpm                                                                                                                                          6.8 MB/s | 2.1 MB     00:00    
+(8/8): ldc-jit-1.15.0-1.fc30.x86_64.rpm                                                                                                                                             7.2 MB/s | 9.7 MB     00:01    
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                                                               6.9 MB/s |  17 MB     00:02     
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                                                                            1/1 
+  Installing       : ldc-druntime-1:1.15.0-1.fc30.x86_64                                                                                                                                                        1/8 
+  Installing       : ldc-druntime-devel-1:1.15.0-1.fc30.x86_64                                                                                                                                                  2/8 
+  Installing       : ldc-phobos-1:1.15.0-1.fc30.x86_64                                                                                                                                                          3/8 
+  Installing       : ldc-phobos-devel-1:1.15.0-1.fc30.x86_64                                                                                                                                                    4/8 
+  Installing       : ldc-jit-1:1.15.0-1.fc30.x86_64                                                                                                                                                             5/8 
+  Installing       : ldc-jit-devel-1:1.15.0-1.fc30.x86_64                                                                                                                                                       6/8 
+  Installing       : ldc-1:1.15.0-1.fc30.x86_64                                                                                                                                                                 7/8 
+  Installing       : indent-2.2.12-3.fc30.x86_64                                                                                                                                                                8/8 
+  Running scriptlet: indent-2.2.12-3.fc30.x86_64                                                                                                                                                                8/8 
+  Verifying        : indent-2.2.12-3.fc30.x86_64                                                                                                                                                                1/8 
+  Verifying        : ldc-1:1.15.0-1.fc30.x86_64                                                                                                                                                                 2/8 
+  Verifying        : ldc-druntime-1:1.15.0-1.fc30.x86_64                                                                                                                                                        3/8 
+  Verifying        : ldc-druntime-devel-1:1.15.0-1.fc30.x86_64                                                                                                                                                  4/8 
+  Verifying        : ldc-jit-1:1.15.0-1.fc30.x86_64                                                                                                                                                             5/8 
+  Verifying        : ldc-jit-devel-1:1.15.0-1.fc30.x86_64                                                                                                                                                       6/8 
+  Verifying        : ldc-phobos-1:1.15.0-1.fc30.x86_64                                                                                                                                                          7/8 
+  Verifying        : ldc-phobos-devel-1:1.15.0-1.fc30.x86_64                                                                                                                                                    8/8 
+
+Installed:
+  indent-2.2.12-3.fc30.x86_64               ldc-1:1.15.0-1.fc30.x86_64             ldc-druntime-1:1.15.0-1.fc30.x86_64          ldc-druntime-devel-1:1.15.0-1.fc30.x86_64      ldc-jit-1:1.15.0-1.fc30.x86_64     
+  ldc-jit-devel-1:1.15.0-1.fc30.x86_64      ldc-phobos-1:1.15.0-1.fc30.x86_64      ldc-phobos-devel-1:1.15.0-1.fc30.x86_64     
+
+Complete!
+[root@workstation build]# 
+
+and some more (it is getting out of the hand)
+[root@workstation ~]# dnf install git SDL2-devel SDL2_ttf-devel openssl-devel spice-protocol fontconfig-devel libX11-devel gnu-free-mono-fonts ivshmem-tools libgle-devel.x86_64
+Docker CE Stable - x86_64                                                                                                                                                           1.7 kB/s | 577  B     00:00    
+Failed to synchronize cache for repo 'docker-ce-stable'
+Fedora Modular 30 - x86_64                                                                                                                                                           40 kB/s |  24 kB     00:00    
+Fedora Modular 30 - x86_64 - Updates                                                                                                                                                 41 kB/s |  24 kB     00:00    
+Fedora 30 - x86_64 - Updates                                                                                                                                                         48 kB/s |  25 kB     00:00    
+Fedora 30 - x86_64                                                                                                                                                                  116 kB/s |  24 kB     00:00    
+RPM Fusion for Fedora 30 - Free - Updates                                                                                                                                            41 kB/s | 9.1 kB     00:00    
+RPM Fusion for Fedora 30 - Free                                                                                                                                                      21 kB/s |  10 kB     00:00    
+RPM Fusion for Fedora 30 - Nonfree - Updates                                                                                                                                         62 kB/s | 9.3 kB     00:00    
+RPM Fusion for Fedora 30 - Nonfree                                                                                                                                                   63 kB/s |  10 kB     00:00    
+virtio-win builds roughly matching what was shipped in latest RHEL                                                                                                                  3.2 kB/s | 3.0 kB     00:00    
+Ignoring repositories: docker-ce-stable
+Package git-2.21.0-1.fc30.x86_64 is already installed.
+Package SDL2-devel-2.0.9-3.fc30.x86_64 is already installed.
+Package SDL2_ttf-devel-2.0.15-2.fc30.x86_64 is already installed.
+Package openssl-devel-1:1.1.1c-2.fc30.x86_64 is already installed.
+Package spice-protocol-0.14.0-1.fc30.noarch is already installed.
+Package fontconfig-devel-2.13.1-8.fc30.x86_64 is already installed.
+Package libX11-devel-1.6.7-1.fc30.x86_64 is already installed.
+Package gnu-free-mono-fonts-20120503-20.fc30.noarch is already installed.
+Package ivshmem-tools-2:3.1.0-8.fc30.x86_64 is already installed.
+Dependencies resolved.
+====================================================================================================================================================================================================================
+ Package                                           Architecture                              Version                                                               Repository                                  Size
+====================================================================================================================================================================================================================
+Installing:
+ libgle-devel                                      x86_64                                    3.1.0-19.fc30                                                         fedora                                     399 k
+Installing dependencies:
+ libXt-devel                                       x86_64                                    1.1.5-11.20190424gitba4ec9376.fc30                                    updates                                    430 k
+ freeglut-devel                                    x86_64                                    3.0.0-10.fc30                                                         fedora                                     112 k
+ libICE-devel                                      x86_64                                    1.0.9-15.fc30                                                         fedora                                      49 k
+ libSM-devel                                       x86_64                                    1.2.3-2.fc30                                                          fedora                                      12 k
+ libXi-devel                                       x86_64                                    1.7.9-9.fc30                                                          fedora                                     101 k
+ libXmu-devel                                      x86_64                                    1.1.2-13.fc30                                                         fedora                                      23 k
+ libgle                                            x86_64                                    3.1.0-19.fc30                                                         fedora                                      50 k
+
+Transaction Summary
+====================================================================================================================================================================================================================
+Install  8 Packages
+
+Total download size: 1.1 M
+Installed size: 3.0 M
+Is this ok [y/N]: y
+Downloading Packages:
+Fedora 30 - x86_64 - Updates                                                          145% [========================================================================================================================(1/8): libICE-devel-1.0.9-15.fc30.x86_64.rpm                                                                                                                                        341 kB/s |  49 kB     00:00    
+(2/8): freeglut-devel-3.0.0-10.fc30.x86_64.rpm                                                                                                                                      730 kB/s | 112 kB     00:00    
+(3/8): libSM-devel-1.2.3-2.fc30.x86_64.rpm                                                                                                                                          460 kB/s |  12 kB     00:00    
+(4/8): libXi-devel-1.7.9-9.fc30.x86_64.rpm                                                                                                                                          3.7 MB/s | 101 kB     00:00    
+(5/8): libXt-devel-1.1.5-11.20190424gitba4ec9376.fc30.x86_64.rpm                                                                                                                    2.2 MB/s | 430 kB     00:00    
+(6/8): libXmu-devel-1.1.2-13.fc30.x86_64.rpm                                                                                                                                        612 kB/s |  23 kB     00:00    
+(7/8): libgle-3.1.0-19.fc30.x86_64.rpm                                                                                                                                              1.1 MB/s |  50 kB     00:00    
+(8/8): libgle-devel-3.1.0-19.fc30.x86_64.rpm                                                                                                                                        1.9 MB/s | 399 kB     00:00    
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                                                               764 kB/s | 1.1 MB     00:01     
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                                                                            1/1 
+  Installing       : libICE-devel-1.0.9-15.fc30.x86_64                                                                                                                                                          1/8 
+  Installing       : libSM-devel-1.2.3-2.fc30.x86_64                                                                                                                                                            2/8 
+  Installing       : libXt-devel-1.1.5-11.20190424gitba4ec9376.fc30.x86_64                                                                                                                                      3/8 
+  Installing       : libXmu-devel-1.1.2-13.fc30.x86_64                                                                                                                                                          4/8 
+  Installing       : libgle-3.1.0-19.fc30.x86_64                                                                                                                                                                5/8 
+  Installing       : libXi-devel-1.7.9-9.fc30.x86_64                                                                                                                                                            6/8 
+  Installing       : freeglut-devel-3.0.0-10.fc30.x86_64                                                                                                                                                        7/8 
+  Installing       : libgle-devel-3.1.0-19.fc30.x86_64                                                                                                                                                          8/8 
+  Running scriptlet: libgle-devel-3.1.0-19.fc30.x86_64                                                                                                                                                          8/8 
+  Verifying        : libXt-devel-1.1.5-11.20190424gitba4ec9376.fc30.x86_64                                                                                                                                      1/8 
+  Verifying        : freeglut-devel-3.0.0-10.fc30.x86_64                                                                                                                                                        2/8 
+  Verifying        : libICE-devel-1.0.9-15.fc30.x86_64                                                                                                                                                          3/8 
+  Verifying        : libSM-devel-1.2.3-2.fc30.x86_64                                                                                                                                                            4/8 
+  Verifying        : libXi-devel-1.7.9-9.fc30.x86_64                                                                                                                                                            5/8 
+  Verifying        : libXmu-devel-1.1.2-13.fc30.x86_64                                                                                                                                                          6/8 
+  Verifying        : libgle-3.1.0-19.fc30.x86_64                                                                                                                                                                7/8 
+  Verifying        : libgle-devel-3.1.0-19.fc30.x86_64                                                                                                                                                          8/8 
+
+Installed:
+  libgle-devel-3.1.0-19.fc30.x86_64     libXt-devel-1.1.5-11.20190424gitba4ec9376.fc30.x86_64     freeglut-devel-3.0.0-10.fc30.x86_64     libICE-devel-1.0.9-15.fc30.x86_64     libSM-devel-1.2.3-2.fc30.x86_64    
+  libXi-devel-1.7.9-9.fc30.x86_64       libXmu-devel-1.1.2-13.fc30.x86_64                         libgle-3.1.0-19.fc30.x86_64            
+
+Complete!
+
+and some more for good measure
+[root@workstation build]# dnf groupinstall "Development Tools" "Development Libraries"
+Docker CE Stable - x86_64                                                                                                                                                           2.3 kB/s | 577  B     00:00    
+Failed to synchronize cache for repo 'docker-ce-stable'
+Ignoring repositories: docker-ce-stable
+Last metadata expiration check: 0:03:07 ago on Sat 22 Jun 2019 03:49:00 AM CEST.
+No match for group package "hesiod-devel"
+Dependencies resolved.
+====================================================================================================================================================================================================================
+ Package                                                      Architecture                            Version                                                        Repository                                Size
+====================================================================================================================================================================================================================
+Installing group/module packages:
+ boost-devel                                                  x86_64                                  1.69.0-8.fc30                                                  updates                                   11 M
+ dbus-devel                                                   x86_64                                  1:1.12.16-1.fc30                                               updates                                   38 k
+ krb5-devel                                                   x86_64                                  1.17-14.fc30                                                   updates                                  438 k
+ libcurl-devel                                                x86_64                                  7.64.0-7.fc30                                                  updates                                  807 k
+ perl-devel                                                   x86_64                                  4:5.28.2-436.fc30                                              updates                                  769 k
+ python3-devel                                                x86_64                                  3.7.3-3.fc30                                                   updates                                  211 k
+ systemtap                                                    x86_64                                  4.1-1.fc30                                                     updates                                  7.2 k
+ binutils-devel                                               x86_64                                  2.31.1-29.fc30                                                 fedora                                   892 k
+ diffstat                                                     x86_64                                  1.62-2.fc30                                                    fedora                                    38 k
+ doxygen                                                      x86_64                                  1:1.8.15-6.fc30                                                fedora                                   4.3 M
+ gmp-devel                                                    x86_64                                  1:6.1.2-10.fc30                                                fedora                                   173 k
+ libacl-devel                                                 x86_64                                  2.2.53-3.fc30                                                  fedora                                    69 k
+ libattr-devel                                                x86_64                                  2.4.48-5.fc30                                                  fedora                                    26 k
+ libcap-devel                                                 x86_64                                  2.26-5.fc30                                                    fedora                                    26 k
+ libdb-devel                                                  x86_64                                  5.3.28-37.fc30                                                 fedora                                    40 k
+ libogg-devel                                                 x86_64                                  2:1.3.3-2.fc30                                                 fedora                                    13 k
+ libselinux-devel                                             x86_64                                  2.9-1.fc30                                                     fedora                                   117 k
+ libuser-devel                                                x86_64                                  0.62-20.fc30                                                   fedora                                    47 k
+ libvorbis-devel                                              x86_64                                  1:1.3.6-4.fc30                                                 fedora                                    19 k
+ libxml2-devel                                                x86_64                                  2.9.9-2.fc30                                                   fedora                                   1.0 M
+ lockdev-devel                                                x86_64                                  1.0.4-0.29.20111007git.fc30                                    fedora                                    12 k
+ openldap-devel                                               x86_64                                  2.4.47-1.fc30                                                  fedora                                   755 k
+ pam-devel                                                    x86_64                                  1.3.1-17.fc30                                                  fedora                                   149 k
+ patchutils                                                   x86_64                                  0.3.4-13.fc30                                                  fedora                                   106 k
+ pciutils-devel                                               x86_64                                  3.6.2-2.fc30                                                   fedora                                    29 k
+ pcsc-lite-devel                                              x86_64                                  1.8.25-1.fc30                                                  fedora                                    43 k
+ readline-devel                                               x86_64                                  8.0-2.fc30                                                     fedora                                   198 k
+ rpm-devel                                                    x86_64                                  4.14.2.1-4.fc30.1                                              fedora                                    90 k
+ slang-devel                                                  x86_64                                  2.3.2-5.fc30                                                   fedora                                   213 k
+Installing dependencies:
+ automake                                                     noarch                                  1.16.1-10.fc30                                                 updates                                  695 k
+ boost                                                        x86_64                                  1.69.0-8.fc30                                                  updates                                   15 k
+ boost-atomic                                                 x86_64                                  1.69.0-8.fc30                                                  updates                                   17 k
+ boost-container                                              x86_64                                  1.69.0-8.fc30                                                  updates                                   43 k
+ boost-context                                                x86_64                                  1.69.0-8.fc30                                                  updates                                   19 k
+ boost-contract                                               x86_64                                  1.69.0-8.fc30                                                  updates                                   53 k
+ boost-coroutine                                              x86_64                                  1.69.0-8.fc30                                                  updates                                   33 k
+ boost-fiber                                                  x86_64                                  1.69.0-8.fc30                                                  updates                                   41 k
+ boost-graph                                                  x86_64                                  1.69.0-8.fc30                                                  updates                                  115 k
+ boost-log                                                    x86_64                                  1.69.0-8.fc30                                                  updates                                  446 k
+ boost-math                                                   x86_64                                  1.69.0-8.fc30                                                  updates                                  265 k
+ boost-program-options                                        x86_64                                  1.69.0-8.fc30                                                  updates                                  147 k
+ boost-stacktrace                                             x86_64                                  1.69.0-8.fc30                                                  updates                                   29 k
+ boost-test                                                   x86_64                                  1.69.0-8.fc30                                                  updates                                  249 k
+ boost-timer                                                  x86_64                                  1.69.0-8.fc30                                                  updates                                   26 k
+ boost-type_erasure                                           x86_64                                  1.69.0-8.fc30                                                  updates                                   37 k
+ boost-wave                                                   x86_64                                  1.69.0-8.fc30                                                  updates                                  222 k
+ glib2-devel                                                  x86_64                                  2.60.4-1.fc30                                                  updates                                  471 k
+ libicu-devel                                                 x86_64                                  63.2-2.fc30                                                    updates                                  934 k
+ libkadm5                                                     x86_64                                  1.17-14.fc30                                                   updates                                   75 k
+ libquadmath-devel                                            x86_64                                  9.1.1-1.fc30                                                   updates                                   36 k
+ libzstd-devel                                                x86_64                                  1.4.0-1.fc30                                                   updates                                   40 k
+ nim-srpm-macros                                              noarch                                  2-1.fc30                                                       updates                                  8.2 k
+ pcre-cpp                                                     x86_64                                  8.43-2.fc30                                                    updates                                   26 k
+ pcre-devel                                                   x86_64                                  8.43-2.fc30                                                    updates                                  532 k
+ pcre-utf16                                                   x86_64                                  8.43-2.fc30                                                    updates                                  173 k
+ pcre-utf32                                                   x86_64                                  8.43-2.fc30                                                    updates                                  163 k
+ pcre2-devel                                                  x86_64                                  10.33-2.fc30                                                   updates                                  620 k
+ pcre2-utf32                                                  x86_64                                  10.33-2.fc30                                                   updates                                  218 k
+ perl-Devel-PPPort                                            x86_64                                  3.51-1.fc30                                                    updates                                  122 k
+ perl-Math-Complex                                            noarch                                  1.59-436.fc30                                                  updates                                   56 k
+ python3-pyparsing                                            noarch                                  2.4.0-1.fc30                                                   updates                                  142 k
+ rust-srpm-macros                                             noarch                                  9-1.fc30                                                       updates                                  9.2 k
+ systemtap-client                                             x86_64                                  4.1-1.fc30                                                     updates                                  3.6 M
+ systemtap-devel                                              x86_64                                  4.1-1.fc30                                                     updates                                  2.3 M
+ systemtap-runtime                                            x86_64                                  4.1-1.fc30                                                     updates                                  448 k
+ systemtap-sdt-devel                                          x86_64                                  4.1-1.fc30                                                     updates                                   69 k
+ annobin                                                      x86_64                                  8.71-1.fc30                                                    fedora                                   188 k
+ autoconf                                                     noarch                                  2.69-29.fc30                                                   fedora                                   698 k
+ cyrus-sasl-devel                                             x86_64                                  2.1.27-0.6rc7.fc30                                             fedora                                   101 k
+ dwz                                                          x86_64                                  0.12-10.fc30                                                   fedora                                   102 k
+ dyninst                                                      x86_64                                  10.0.0-7.fc30                                                  fedora                                   3.8 M
+ efi-srpm-macros                                              noarch                                  4-2.fc30                                                       fedora                                    23 k
+ fpc-srpm-macros                                              noarch                                  1.2-1.fc30                                                     fedora                                   7.5 k
+ ghc-srpm-macros                                              noarch                                  1.4.2-9.fc30                                                   fedora                                   7.6 k
+ gmp-c++                                                      x86_64                                  1:6.1.2-10.fc30                                                fedora                                    17 k
+ gnat-srpm-macros                                             noarch                                  4-9.fc30                                                       fedora                                   8.5 k
+ go-srpm-macros                                               noarch                                  2-19.fc30                                                      fedora                                    11 k
+ keyutils-libs-devel                                          x86_64                                  1.6-2.fc30                                                     fedora                                    49 k
+ libblkid-devel                                               x86_64                                  2.33.2-1.fc30                                                  fedora                                    16 k
+ libcom_err-devel                                             x86_64                                  1.44.6-1.fc30                                                  fedora                                    17 k
+ libffi-devel                                                 x86_64                                  3.1-19.fc30                                                    fedora                                    24 k
+ libmount-devel                                               x86_64                                  2.33.2-1.fc30                                                  fedora                                    18 k
+ libsepol-devel                                               x86_64                                  2.9-1.fc30                                                     fedora                                    45 k
+ libuuid-devel                                                x86_64                                  2.33.2-1.fc30                                                  fedora                                    28 k
+ libverto-devel                                               x86_64                                  0.3.0-7.fc30                                                   fedora                                    15 k
+ m4                                                           x86_64                                  1.4.18-10.fc30                                                 fedora                                   210 k
+ ocaml-srpm-macros                                            noarch                                  5-5.fc30                                                       fedora                                   7.7 k
+ openblas-srpm-macros                                         noarch                                  2-5.fc30                                                       fedora                                   7.3 k
+ perl-CPAN-Meta-Requirements                                  noarch                                  2.140-419.fc30                                                 fedora                                    32 k
+ perl-CPAN-Meta-YAML                                          noarch                                  0.018-419.fc30                                                 fedora                                    26 k
+ perl-ExtUtils-Command                                        noarch                                  1:7.34-419.fc30                                                fedora                                    14 k
+ perl-ExtUtils-Install                                        noarch                                  2.14-419.fc30                                                  fedora                                    45 k
+ perl-ExtUtils-MakeMaker                                      noarch                                  1:7.34-419.fc30                                                fedora                                   296 k
+ perl-ExtUtils-Manifest                                       noarch                                  1:1.72-1.fc30                                                  fedora                                    34 k
+ perl-ExtUtils-ParseXS                                        noarch                                  1:3.39-419.fc30                                                fedora                                   188 k
+ perl-JSON-PP                                                 noarch                                  1:4.02-1.fc30                                                  fedora                                    69 k
+ perl-Math-BigInt                                             noarch                                  1:1.9998.16-2.fc30                                             fedora                                   194 k
+ perl-Test-Harness                                            noarch                                  1:3.42-419.fc30                                                fedora                                   276 k
+ perl-Thread-Queue                                            noarch                                  3.13-2.fc30                                                    fedora                                    21 k
+ perl-srpm-macros                                             noarch                                  1-29.fc30                                                      fedora                                   8.2 k
+ perl-version                                                 x86_64                                  7:0.99.24-6.fc30                                               fedora                                    62 k
+ popt-devel                                                   x86_64                                  1.16-17.fc30                                                   fedora                                    25 k
+ python-rpm-macros                                            noarch                                  3-42.fc30                                                      fedora                                    11 k
+ python-srpm-macros                                           noarch                                  3-42.fc30                                                      fedora                                    11 k
+ python3-rpm-generators                                       noarch                                  7-2.fc30                                                       fedora                                    23 k
+ python3-rpm-macros                                           noarch                                  3-42.fc30                                                      fedora                                    10 k
+ qt5-srpm-macros                                              noarch                                  5.12.1-1.fc30                                                  fedora                                   9.1 k
+ redhat-rpm-config                                            noarch                                  128-1.fc30                                                     fedora                                    60 k
+ xapian-core-libs                                             x86_64                                  1.4.10-1.fc30                                                  fedora                                   737 k
+ xz-devel                                                     x86_64                                  5.2.4-5.fc30                                                   fedora                                    56 k
+Installing weak dependencies:
+ kernel-devel                                                 x86_64                                  5.1.11-300.fc30                                                updates                                   13 M
+ perl-CPAN-Meta                                               noarch                                  2.150010-418.fc30                                              fedora                                   181 k
+ perl-Encode-Locale                                           noarch                                  1.05-12.fc30                                                   fedora                                    19 k
+Installing Groups:
+ Development Tools                                                                                                                                                                                                 
+ Development Libraries                                                                                                                                                                                             
+
+Transaction Summary
+====================================================================================================================================================================================================================
+Install  113 Packages
+
+Gee.
+Following was needed to move some step further
+[root@workstation build]# dnf install libconfig-devel nettle-devel
+Docker CE Stable - x86_64                                                                                                                                                           1.8 kB/s | 577  B     00:00    
+Failed to synchronize cache for repo 'docker-ce-stable'
+Ignoring repositories: docker-ce-stable
+Last metadata expiration check: 0:16:19 ago on Sat 22 Jun 2019 03:49:00 AM CEST.
+Dependencies resolved.
+====================================================================================================================================================================================================================
+ Package                                                Architecture                                  Version                                                   Repository                                     Size
+====================================================================================================================================================================================================================
+Installing:
+ libconfig-devel                                        x86_64                                        1.7.2-3.fc30                                              fedora                                        351 k
+ nettle-devel                                           x86_64                                        3.4.1rc1-2.fc30                                           fedora                                        632 k
+
+Transaction Summary
+====================================================================================================================================================================================================================
+Install  2 Packages
+
+now the error has changed.
+[root@workstation build]# cmake ../
+-- GMP libs: /usr/lib64/libgmp.so /usr/lib64/libgmpxx.so
+-- Checking for modules 'spice-protocol;nettle;hogweed'
+--   Found spice-protocol, version 0.14.0
+--   Found nettle, version 3.4.1
+--   Found hogweed, version 3.4.1
+-- Checking for modules 'egl;wayland-egl;gl'
+--   Package 'wayland-egl', required by 'virtual:world', not found
+CMake Error at /usr/share/cmake/Modules/FindPkgConfig.cmake:457 (message):
+  A required package was not found
+Call Stack (most recent call first):
+  /usr/share/cmake/Modules/FindPkgConfig.cmake:642 (_pkg_check_modules_internal)
+  renderers/EGL/CMakeLists.txt:5 (pkg_check_modules)
+
+
+-- Configuring incomplete, errors occurred!
+See also "/root/LookingGlass/client/build/CMakeFiles/CMakeOutput.log".
+[root@workstation build]# 
+
+
+Then wayland-devel and cmake has worked.
+[root@workstation build]# dnf install wayland-devel
+Docker CE Stable - x86_64                                                                                                                                                           1.9 kB/s | 577  B     00:00    
+Failed to synchronize cache for repo 'docker-ce-stable'
+Ignoring repositories: docker-ce-stable
+Last metadata expiration check: 0:03:31 ago on Sat 22 Jun 2019 04:09:10 AM CEST.
+Dependencies resolved.
+====================================================================================================================================================================================================================
+ Package                                               Architecture                                   Version                                                  Repository                                      Size
+====================================================================================================================================================================================================================
+Installing:
+ wayland-devel                                         x86_64                                         1.17.0-1.fc30                                            fedora                                         139 k
+
+Transaction Summary
+====================================================================================================================================================================================================================
+Install  1 Package
+
+Total download size: 139 k
+Installed size: 592 k
+Is this ok [y/N]: y
+Downloading Packages:
+wayland-devel-1.17.0-1.fc30.x86_64.rpm                                                                                                                                              762 kB/s | 139 kB     00:00    
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                                                               124 kB/s | 139 kB     00:01     
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                                                                            1/1 
+  Installing       : wayland-devel-1.17.0-1.fc30.x86_64                                                                                                                                                         1/1 
+  Running scriptlet: wayland-devel-1.17.0-1.fc30.x86_64                                                                                                                                                         1/1 
+  Verifying        : wayland-devel-1.17.0-1.fc30.x86_64                                                                                                                                                         1/1 
+
+Installed:
+  wayland-devel-1.17.0-1.fc30.x86_64                                                                                                                                                                                
+
+Complete!
+[root@workstation build]# cmake ../
+-- GMP libs: /usr/lib64/libgmp.so /usr/lib64/libgmpxx.so
+-- Checking for modules 'egl;wayland-egl;gl'
+--   Found egl, version 19.0.6
+--   Found wayland-egl, version 18.1.0
+--   Found gl, version 19.0.6
+-- Checking for modules 'gl;glu'
+--   Found gl, version 19.0.6
+--   Found glu, version 9.0.0
+-- Checking for modules 'x11;xfixes'
+--   Found x11, version 1.6.7
+--   Found xfixes, version 5.0.3
+-- Checking for modules 'SDL2_ttf;fontconfig'
+--   Found SDL2_ttf, version 2.0.15
+--   Found fontconfig, version 2.13.1
+-- The following features have been enabled:
+
+ * ENABLE_OPENGL, Legacy OpenGL renderer.
+ * ENABLE_EGL, EGL renderer.
+ * ENABLE_CB_X11, X11 Clipboard Integration.
+ * ENABLE_BACKTRACE, Backtrace support.
+
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /root/LookingGlass/client/build
+[root@workstation build]# 
+
+After the last step make worked. I have looking-glass-client in build directory.
+This was pain and I installed so much stuff, I am not sure it will not make some issues down the road.
+More I am thinking about this more assured I am becoming that new install will be needed, especially if I intend documenting it one the web.
+I have to take a look at backup possibility so when experimenting I can step back and undo whatever changes to system and personal files I did.
+If and when re-install don't forget to change file system and for God's sake don't forger to git this document. 
