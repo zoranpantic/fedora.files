@@ -1,4 +1,6 @@
-popcorn
+https://unix.stackexchange.com/questions/8656/usr-bin-vs-usr-local-bin-on-linux
+where to install in linux. There is great answer in that thread.
+
 https://gitlab.com/Preisschild/popcorntime-flatpak
 it was possible to install it by using that page instructions.
 flatpack-build and some other packages were installed in that process too
@@ -7,6 +9,8 @@ flatpack & snap allowed me to install acestream and few more, can't remember whi
 
 i3wm found this process after trying to run d-loaded torrent by clicking on it
 /app/popcorntime/Popcorn-Time --type=zygote --no-sandbox --enable-crash-reporter=, --user-data-dir=/home/zoran/.var/app/sh.popcorntime.PopcornTime/config/Popcorn-Time
+
+To keep torrent files to open Popcorn-Time as default application is the way to go as far as popcorn is concerned on i3wm.
 
 process of making emacs into c and c++ editor
 

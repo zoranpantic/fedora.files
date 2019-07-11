@@ -1,0 +1,526 @@
+#+TITLE:new basic install
+#+AUTHOR:zorpan
+#+BEGIN_COMMENT
+I am trying to install minimum i3wm system. Basic system is fedora30
+#+END_COMMENT
+
+* Basic installation
+  fedora 30 net installation, software chosen is basic, disk partitioning is automatic. All worked as expected. Created user zoran and assigned root password. zoran/zoran root/root. Booted and logged in locally in VM and remotely from ssh. 
+
+** hostname has to be changed
+   hostname is localhost.localdomain and has to be changed to whatever.homenetwork Used [[https://fedoramagazine.org/set-hostname-fedora/][fedora magazine]]
+Changed it to minifedora.homenetwork with command
+#+BEGIN_SRC linux
+[root@localhost zoran]# hostnamectl set-hostname minifedora.homenetwork
+[root@localhost zoran]# hostnamectl
+  Static hostname: minifedora.homenetwork
+         Icon name: computer-vm
+           Chassis: vm
+        Machine ID: fc1e7e7556e743b6af0795b614fd8886
+           Boot ID: fc25806094c24803b4bfaf60430115e8
+    Virtualization: kvm
+  Operating System: Fedora 30 (Thirty)
+       CPE OS Name: cpe:/o:fedoraproject:fedora:30
+            Kernel: Linux 5.1.16-300.fc30.x86_64
+      Architecture: x86-64
+[root@localhost zoran]# reboot now
+#+END_SRC
+Notice difference in prompt and hostnamectl output as far as hostname.
+Rebooted.
+#+BEGIN_SRC 
+[zoran@minifedora ~]$ hostnamectl 
+   Static hostname: minifedora.homenetwork
+         Icon name: computer-vm
+           Chassis: vm
+        Machine ID: fc1e7e7556e743b6af0795b614fd8886
+           Boot ID: 1da590a4e6ff4ff59fe69d5962a2769f
+    Virtualization: kvm
+  Operating System: Fedora 30 (Thirty)
+       CPE OS Name: cpe:/o:fedoraproject:fedora:30
+            Kernel: Linux 5.1.16-300.fc30.x86_64
+      Architecture: x86-64
+[zoran@minifedora ~]$ 
+#+END_SRC
+Done
+
+** update system
+   Done.
+
+** dnf install bash-completion
+   Done.
+
+** user can't sudo
+#+BEGIN_SRC linux
+[zoran@minifedora ~]$ sudo ls
+[sudo] password for zoran: 
+zoran is not in the sudoers file.  This incident will be reported.
+[zoran@minifedora ~]$ 
+#+END_SRC
+
+Used link from [[https://fedoramagazine.org/howto-use-sudo/][fedora magazine]] to type following as root
+#+BEGIN_SRC linux
+[root@minifedora ~]# usermod -a -G wheel zoran
+#+END_SRC
+
+Then exited from ssh (same as to log out user)
+#+BEGIN_SRC linux
+[root@minifedora zoran]# exit
+exit
+[zoran@minifedora ~]$ exit
+logout
+Connection to 192.168.122.41 closed.
+#+END_SRC
+
+Logged in again and checked the result.
+#+BEGIN_SRC linux
+[zoran@workstation ~]$ ssh zoran@192.168.122.41
+zoran@192.168.122.41's password: 
+Last login: Mon Jul  8 14:57:52 2019 from 192.168.122.1
+[zoran@minifedora ~]$ id
+uid=1000(zoran) gid=1000(zoran) groups=1000(zoran),10(wheel) context=unconfined_u:unconfined_r:unconfined_t:s0-s0:c0.c1023
+[zoran@minifedora ~]$ sudo ls /root/
+Password:
+anaconda-ks.cfg
+#+END_SRC
+
+Done.
+
+* X.org X11 i3
+  Idea is to proceed slowly until I get i3 working. In order to somehow start with X.org and X11 I read this [[https://discussion.fedoraproject.org/t/using-i3wm-with-fedora/446/6][link]]
+
+I will start by some of these commands
+dnf install xorg-x11-font-utils xorg-x11-xauth xorg-x11-xbitmaps xorg-x11-server-utils xorg-x11-apps xorg-x11-server-common xorg-x11-xinit xorg-x11-server-Xorg xorg-x11-fonts-misc xorg-x11-drv-libinput xorg-x11-xkb-utils xorg-x11-utils 
+
+i3 i3lock i3status dmenu 
+
+i3 i3lock i3status dmenu 
+
+xorg-x11-drv-intel 
+
+powerline zsh chromium xfce4-terminal emoji-picker vim spice-vdagent xorg-x11-drv-qxl sqlite -y
+
+When queering to install i3 following popped up as dependencies. 
+xorg-x11-font-utils                                     x86_64                                 1:7.5-41.fc30                                                         fedora                                   96 k
+xorg-x11-fonts-misc                                     noarch                                 7.5-21.fc30                                                           fedora                                  5.8 M
+xorg-x11-xbitmaps                                       noarch                                 1.1.1-16.fc30                                                         fedora                                   38 k
+Installing weak dependencies:
+xorg-x11-apps         
+
+libX11                                                  x86_64                                 1.6.7-1.fc30                                                          fedora                                  593 k
+libX11-common                                           noarch                                 1.6.7-1.fc30                                                          fedora                                  155 k
+libX11-xcb                                              x86_64                                 1.6.7-1.fc30                                                          fedora                                   11 k
+
+
+I started by installing following
+#+BEGIN_SRC linux
+dnf install xorg-x11-font-utils xorg-x11-xauth xorg-x11-xbitmaps xorg-x11-server-utils xorg-x11-apps xorg-x11-server-common xorg-x11-xinit xorg-x11-server-Xorg xorg-x11-fonts-misc xorg-x11-drv-libinput xorg-x11-xkb-utils xorg-x11-utils
+#+END_SRC
+
+Got following installed.
+#+BEGIN_SRC linux
+Installed:
+  xorg-x11-server-Xorg-1.20.5-3.fc30.x86_64         xorg-x11-server-common-1.20.5-3.fc30.x86_64             xorg-x11-apps-7.7-24.fc30.x86_64                      xorg-x11-drv-libinput-0.28.2-1.fc30.x86_64        
+  xorg-x11-font-utils-1:7.5-41.fc30.x86_64          xorg-x11-fonts-misc-7.5-21.fc30.noarch                  xorg-x11-server-utils-7.7-28.fc30.x86_64              xorg-x11-utils-7.5-30.fc30.x86_64                 
+  xorg-x11-xauth-1:1.0.9-14.fc30.x86_64             xorg-x11-xbitmaps-1.1.1-16.fc30.noarch                  xorg-x11-xinit-1.4.0-4.fc30.x86_64                    xorg-x11-xkb-utils-7.7-29.fc30.x86_64             
+  fontconfig-2.13.1-8.fc30.x86_64                   libXt-1.1.5-11.20190424gitba4ec9376.fc30.x86_64         libinput-1.13.4-1.fc30.x86_64                         mesa-libEGL-19.0.8-1.fc30.x86_64                  
+  mesa-libGL-19.0.8-1.fc30.x86_64                   mesa-libgbm-19.0.8-1.fc30.x86_64                        mesa-libglapi-19.0.8-1.fc30.x86_64                    dejavu-fonts-common-2.37-1.fc30.noarch            
+  dejavu-sans-fonts-2.37-1.fc30.noarch              fontpackages-filesystem-1.44-24.fc30.noarch             libICE-1.0.9-15.fc30.x86_64                           libSM-1.2.3-2.fc30.x86_64                         
+  libX11-1.6.7-1.fc30.x86_64                        libX11-common-1.6.7-1.fc30.noarch                       libX11-xcb-1.6.7-1.fc30.x86_64                        libXau-1.0.9-1.fc30.x86_64                        
+  libXaw-1.0.13-12.fc30.x86_64                      libXcomposite-0.4.4-16.fc30.x86_64                      libXcursor-1.1.15-5.fc30.x86_64                       libXdamage-1.1.4-16.fc30.x86_64                   
+  libXdmcp-1.1.2-13.fc30.x86_64                     libXext-1.3.3-11.fc30.x86_64                            libXfixes-5.0.3-9.fc30.x86_64                         libXfont2-2.0.3-4.fc30.x86_64                     
+  libXft-2.3.2-12.fc30.x86_64                       libXi-1.7.9-9.fc30.x86_64                               libXinerama-1.1.4-3.fc30.x86_64                       libXmu-1.1.2-13.fc30.x86_64                       
+  libXpm-3.5.12-9.fc30.x86_64                       libXrandr-1.5.1-9.fc30.x86_64                           libXrender-0.9.10-9.fc30.x86_64                       libXtst-1.2.3-9.fc30.x86_64                       
+  libXv-1.0.11-9.fc30.x86_64                        libXxf86dga-1.1.4-14.fc30.x86_64                        libXxf86misc-1.0.4-3.fc30.x86_64                      libXxf86vm-1.1.4-11.fc30.x86_64                   
+  libdmx-1.1.4-5.fc30.x86_64                        libepoxy-1.5.3-2.fc30.x86_64                            libevdev-1.6.0-2.fc30.x86_64                          libfontenc-1.1.3-10.fc30.x86_64                   
+  libglvnd-1:1.1.0-4.gitf92208b.fc30.x86_64         libglvnd-egl-1:1.1.0-4.gitf92208b.fc30.x86_64           libglvnd-glx-1:1.1.0-4.gitf92208b.fc30.x86_64         libgudev-232-5.fc30.x86_64                        
+  libmcpp-2.7.2-23.fc30.x86_64                      libunwind-1.3.1-2.fc30.x86_64                           libwacom-0.33-1.fc30.x86_64                           libwacom-data-0.33-1.fc30.noarch                  
+  libwayland-client-1.17.0-1.fc30.x86_64            libwayland-server-1.17.0-1.fc30.x86_64                  libxcb-1.13.1-2.fc30.x86_64                           libxkbfile-1.0.9-12.fc30.x86_64                   
+  libxshmfence-1.3-4.fc30.x86_64                    mcpp-2.7.2-23.fc30.x86_64                               mtdev-1.1.5-14.fc30.x86_64                            pixman-0.38.0-1.fc30.x86_64                       
+#+END_SRC
+
+Not sure if needed but I will reboot.
+
+Installed i3 i3lock i3status dmenu
+#+BEGIN_SRC linux
+[zoran@minifedora ~]$ sudo dnf install i3 i3lock i3status dmenu
+#+END_SRC
+
+Result was as following
+#+BEGIN_SRC linux
+Installed:
+  dmenu-4.9-1.fc30.x86_64                               i3-4.16.1-1.fc30.x86_64                               i3lock-2.11.1-2.fc30.x86_64                         i3status-2.12-2.fc30.x86_64                     
+  perl-Guard-1.023-14.fc30.x86_64                       perl-IO-Socket-IP-0.39-419.fc30.noarch                perl-IO-Socket-SSL-2.066-1.fc30.noarch              perl-Mozilla-CA-20180117-4.fc30.noarch          
+  perl-Sys-Syslog-0.35-419.fc30.x86_64                  perl-Task-Weaken-1.06-4.fc30.noarch                   rxvt-unicode-9.22-12.fc30.x86_64                    alsa-lib-1.1.9-1.fc30.x86_64                    
+  cairo-1.16.0-5.fc30.x86_64                            perl-Errno-1.29-436.fc30.x86_64                       perl-IO-1.39-436.fc30.x86_64                        perl-Storable-1:3.15-2.fc30.x86_64              
+  perl-interpreter-4:5.28.2-436.fc30.x86_64             perl-libs-4:5.28.2-436.fc30.x86_64                    perl-macros-4:5.28.2-436.fc30.x86_64                perl-open-1.11-436.fc30.noarch                  
+  perl-podlators-1:4.12-1.fc30.noarch                   pulseaudio-libs-12.2-6.fc30.x86_64                    dzen2-0.8.5-23.20100104svn.fc30.x86_64              flac-libs-1.3.2-10.fc30.x86_64                  
+  fribidi-1.0.5-2.fc30.x86_64                           gdk-pixbuf2-2.38.1-1.fc30.x86_64                      graphite2-1.3.10-7.fc30.x86_64                      gsm-1.0.18-4.fc30.x86_64                        
+  harfbuzz-2.3.1-1.fc30.x86_64                          libasyncns-0.8-16.fc30.x86_64                         libconfuse-3.2.2-2.fc30.x86_64                      libdatrie-0.2.9-9.fc30.x86_64                   
+  libev-4.25-8.fc30.x86_64                              libogg-2:1.3.3-2.fc30.x86_64                          libsndfile-1.0.28-10.fc30.x86_64                    libthai-0.1.28-2.fc30.x86_64                    
+  libvorbis-1:1.3.6-4.fc30.x86_64                       libxkbcommon-x11-0.8.3-1.fc30.x86_64                  pango-1.43.0-3.fc30.x86_64                          perl-AnyEvent-7.15-1.fc30.x86_64                
+  perl-AnyEvent-I3-0.17-7.fc30.noarch                   perl-Carp-1.50-418.fc30.noarch                        perl-Data-Dumper-2.173-3.fc30.x86_64                perl-Digest-1.17-418.fc30.noarch                
+  perl-Digest-MD5-2.55-418.fc30.x86_64                  perl-Encode-4:3.01-10.fc30.x86_64                     perl-Exporter-5.73-419.fc30.noarch                  perl-File-Path-2.16-2.fc30.noarch               
+  perl-File-Temp-1:0.230.900-2.fc30.noarch              perl-Filter-2:1.59-2.fc30.x86_64                      perl-Getopt-Long-1:2.50-418.fc30.noarch             perl-HTTP-Tiny-0.076-2.fc30.noarch              
+  perl-JSON-XS-1:4.02-1.fc30.x86_64                     perl-MIME-Base64-3.15-418.fc30.x86_64                 perl-Net-SSLeay-1.85-10.fc30.x86_64                 perl-PathTools-3.75-2.fc30.x86_64               
+  perl-Pod-Escapes-1:1.07-418.fc30.noarch               perl-Pod-Perldoc-3.28.01-419.fc30.noarch              perl-Pod-Simple-1:3.35-418.fc30.noarch              perl-Pod-Usage-4:1.69-418.fc30.noarch           
+  perl-Scalar-List-Utils-3:1.50-418.fc30.x86_64         perl-Socket-4:2.029-1.fc30.x86_64                     perl-Term-ANSIColor-4.06-419.fc30.noarch            perl-Term-Cap-1.17-418.fc30.noarch              
+  perl-Text-ParseWords-3.30-418.fc30.noarch             perl-Text-Tabs+Wrap-2013.0523-418.fc30.noarch         perl-Time-HiRes-1.9760-1.fc30.x86_64                perl-Time-Local-2:1.280-4.fc30.noarch           
+  perl-Types-Serialiser-1.0-15.fc30.noarch              perl-URI-1.76-2.fc30.noarch                           perl-Unicode-Normalize-1.26-418.fc30.x86_64         perl-common-sense-3.7.4-11.fc30.x86_64          
+  perl-constant-1.33-419.fc30.noarch                    perl-encoding-4:2.22-10.fc30.x86_64                   perl-libnet-3.11-419.fc30.noarch                    perl-parent-1:0.237-3.fc30.noarch               
+  perl-threads-1:2.22-418.fc30.x86_64                   perl-threads-shared-1.59-2.fc30.x86_64                startup-notification-0.12-17.fc30.x86_64            xcb-util-0.4.0-12.fc30.x86_64                   
+  xcb-util-cursor-0.1.3-8.fc30.x86_64                   xcb-util-image-0.4.0-12.fc30.x86_64                   xcb-util-keysyms-0.4.0-10.fc30.x86_64               xcb-util-renderutil-0.3.9-13.fc30.x86_64        
+  xcb-util-wm-0.4.1-15.fc30.x86_64                      xcb-util-xrm-1.3-3.fc30.x86_64                       
+
+Complete!
+#+END_SRC
+
+I created .xinit in home directory as explained in [[https://en.wikibooks.org/wiki/Guide_to_X11/Starting_Sessions][how to start i3]]
+#+BEGIN_SRC linux
+[zoran@minifedora ~]$ pwd
+/home/zoran
+[zoran@minifedora ~]$ touch .xinitrc
+[zoran@minifedora ~]$ vi .xinitrc 
+[zoran@minifedora ~]$ cat .xinitrc 
+exec i3
+[zoran@minifedora ~]$ 
+#+END_SRC
+
+Then I run
+#+BEGIN_SRC linux
+startx
+#+END_SRC
+from tty terminal as explained in same link, and it worked just fine. I got urxvt (rxvt-unicode) terminal after starting i3 session.
+
+Few more things left I think, change font and background in rxvt-unicode and in 13 as well. But first...
+#+BEGIN_SRC 
+[root@minifedora zoran]# rpm -qa | wc -l
+498
+[root@minifedora zoran]# 
+#+END_SRC
+Only 498 packages so far. This seems to be great.
+Rebooted.
+
+*** Vim
+    Vim is missing so far. Here it comes. 
+#+BEGIN_SRC linux 
+[zoran@minifedora ~]$ sudo dnf install vim
+
+Installed:
+  vim-enhanced-2:8.1.1602-1.fc30.x86_64                 vim-common-2:8.1.1602-1.fc30.x86_64                 vim-filesystem-2:8.1.1602-1.fc30.noarch                 gpm-libs-1.20.7-18.fc30.x86_64                
+
+Complete!
+#+END_SRC
+
+*** git
+    Here comes git
+#+BEGIN_SRC linux
+[zoran@minifedora ~]$ sudo dnf install git
+
+Installed:
+  git-2.21.0-1.fc30.x86_64             emacs-filesystem-1:26.2-1.fc30.noarch  git-core-2.21.0-1.fc30.x86_64  git-core-doc-2.21.0-1.fc30.noarch  perl-Error-1:0.17027-2.fc30.noarch  perl-Git-2.21.0-1.fc30.noarch 
+  perl-TermReadKey-2.38-2.fc30.x86_64 
+
+Complete!
+[zoran@minifedora ~]$ 
+#+END_SRC
+
+*** urxvt (rxvt-unicode)
+    Now is the time to fix i3 terminal prompt. I copied ~/.Xresources from fedora workstation where I am running i3wm but it did not work. Maybe it is because I am trying to execute it in VM. 
+
+**** does not work so I tried installing xorg-x11-drv-qxl-0.1.5-11.fc30.x86_64 but removed it since it does not seem to affect anything. Maybe it will make difference on real machine where qxl might be needed. But so far I am skipping in on this VM.
+#+BEGIN_SRC 
+[root@minifedora zoran]# dnf install xorg-x11-drv-qxl-0.1.5-11.fc30.x86_64 
+Last metadata expiration check: 0:46:08 ago on Mon 08 Jul 2019 06:28:01 PM CEST.
+Dependencies resolved.
+=====================================================================================================================================================================================================================
+ Package                                                  Architecture                                   Version                                                Repository                                      Size
+=====================================================================================================================================================================================================================
+Installing:
+ xorg-x11-drv-qxl                                         x86_64                                         0.1.5-11.fc30                                          fedora                                          87 k
+
+Transaction Summary
+=====================================================================================================================================================================================================================
+Install  1 Package
+
+Total download size: 87 k
+Installed size: 228 k
+Is this ok [y/N]: y
+Downloading Packages:
+xorg-x11-drv-qxl-0.1.5-11.fc30.x86_64.rpm                                                                                                                                            519 kB/s |  87 kB     00:00    
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                                                                129 kB/s |  87 kB     00:00     
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                                                                             1/1 
+  Installing       : xorg-x11-drv-qxl-0.1.5-11.fc30.x86_64                                                                                                                                                       1/1 
+  Running scriptlet: xorg-x11-drv-qxl-0.1.5-11.fc30.x86_64                                                                                                                                                       1/1 
+  Verifying        : xorg-x11-drv-qxl-0.1.5-11.fc30.x86_64                                                                                                                                                       1/1 
+
+Installed:
+  xorg-x11-drv-qxl-0.1.5-11.fc30.x86_64                                                                                                                                                                              
+
+Complete!
+[root@minifedora zoran]# 
+#+END_SRC
+So far is just single package, and I removed as described at the beginning of the installation procedure of this package.
+
+
+**** it works, somewhat
+So it seems this one made difference. But reboot of the system was needed and that slowed me down looking for error which seems was not there. As I understand issue (urxvt terminal looking white background and small nonchangable font size) was due to my system missing any tft font. So inconsolata as installed by following procedure seem to solve font problem as well as background. But size still can't be changed. And I have to run
+#+BEGIN_SRC linux
+srdb .Xresources
+#+END_SRC
+in home directory after opening terminal. Then I have to close the terminal and open it again.
+
+installed font
+#+BEGIN_SRC 
+[zoran@minifedora ~]$ sudo dnf install levien-inconsolata-fonts-2.012-3.fc30.noarch 
+[sudo] password for zoran: 
+Fedora Modular 30 - x86_64                                                                                                                                                            35 kB/s |  23 kB     00:00    
+Fedora Modular 30 - x86_64 - Updates                                                                                                                                                  30 kB/s |  23 kB     00:00    
+Fedora 30 - x86_64 - Updates                                                                                                                                                          42 kB/s |  22 kB     00:00    
+Fedora 30 - x86_64                                                                                                                                                                   106 kB/s |  24 kB     00:00    
+Dependencies resolved.
+=====================================================================================================================================================================================================================
+ Package                                                        Architecture                                 Version                                              Repository                                    Size
+=====================================================================================================================================================================================================================
+Installing:
+ levien-inconsolata-fonts                                       noarch                                       2.012-3.fc30                                         fedora                                       834 k
+
+Transaction Summary
+=====================================================================================================================================================================================================================
+Install  1 Package
+
+Total download size: 834 k
+Installed size: 1.3 M
+Is this ok [y/N]: y
+Downloading Packages:
+levien-inconsolata-fonts-2.012-3.fc30.noarch.rpm                                                                                                                                     3.4 MB/s | 834 kB     00:00    
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                                                                1.0 MB/s | 834 kB     00:00     
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                                                                             1/1 
+  Installing       : levien-inconsolata-fonts-2.012-3.fc30.noarch                                                                                                                                                1/1 
+  Running scriptlet: levien-inconsolata-fonts-2.012-3.fc30.noarch                                                                                                                                                1/1 
+  Verifying        : levien-inconsolata-fonts-2.012-3.fc30.noarch                                                                                                                                                1/1 
+
+Installed:
+  levien-inconsolata-fonts-2.012-3.fc30.noarch                                                                                                                                                                       
+
+Complete!
+[zoran@minifedora ~]$ 
+#+END_SRC
+
+Removed levien-inconsolata fonts and lost it right away. 
+
+**** solved .Xresources not loading
+     This was solved by editing ~/.xinitrc which now looks like
+#+BEGIN_SRC linux
+[zoran@minifedora ~]$ cat .xinitrc
+[[ -f ~/.Xresources ]] && xrdb -merge ~/.Xresources
+exec i3
+[zoran@minifedora ~]$ 
+#+END_SRC
+
+I edited that .xinitrc according to this [[https://www.archviet.com/2013/07/01/how-to-load-xresources-correctly/][link]]
+
+So far
+#+BEGIN_SRC linux
+[zoran@minifedora ~]$ rpm -qa | wc -l
+510
+[zoran@minifedora ~]$ 
+#+END_SRC
+Only 510 packages. Great. 
+
+**** UNSOLVED
+     Font resizing.
+
+**** New font DejaVu Sans Mono
+     Installed DejaVu Sans Mono and after reboot font changed. This font is the one I am used to at desktop system I am using now, fedora workstation. Remember reboot was needed for font to become operational. But issue still persist. I still can't resize fonts. 
+
+Following is how and what was installed at this step.
+#+BEGIN_SRC linux
+[zoran@minifedora levien-inconsolata]$ sudo dnf install dejavu-sans-mono-fonts-2.37-1.fc30.noarch 
+[sudo] password for zoran: 
+Last metadata expiration check: 0:00:03 ago on Mon 08 Jul 2019 09:49:19 PM CEST.
+Dependencies resolved.
+====================================================================================================================================================================================================================
+ Package                                                       Architecture                                  Version                                            Repository                                     Size
+====================================================================================================================================================================================================================
+Installing:
+ dejavu-sans-mono-fonts                                        noarch                                        2.37-1.fc30                                        fedora                                        439 k
+
+Transaction Summary
+====================================================================================================================================================================================================================
+Install  1 Package
+
+Total download size: 439 k
+Installed size: 1.1 M
+Is this ok [y/N]: y
+Downloading Packages:
+dejavu-sans-mono-fonts-2.37-1.fc30.noarch.rpm                                                                                                                                       2.7 MB/s | 439 kB     00:00    
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                                                               895 kB/s | 439 kB     00:00     
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                                                                            1/1 
+  Installing       : dejavu-sans-mono-fonts-2.37-1.fc30.noarch                                                                                                                                                  1/1 
+  Running scriptlet: dejavu-sans-mono-fonts-2.37-1.fc30.noarch                                                                                                                                                  1/1 
+  Verifying        : dejavu-sans-mono-fonts-2.37-1.fc30.noarch                                                                                                                                                  1/1 
+
+Installed:
+  dejavu-sans-mono-fonts-2.37-1.fc30.noarch                                                                                                                                                                         
+
+Complete!
+#+END_SRC
+[zoran@minifedora levien-inconsolata]$ 
+
+* Continuation
+  Due to being on VM I installed tmux. I need it.
+
+#+BEGIN_SRC linux
+[zoran@minifedora ~]$ sudo dnf groupinstall "C Development Tools and Libraries"
+Last metadata expiration check: 1:27:55 ago on Mon 08 Jul 2019 10:08:25 PM CEST.
+Dependencies resolved.
+=====================================================================================================================================================================================================================
+ Package                                            Architecture                            Version                                                                   Repository                                Size
+=====================================================================================================================================================================================================================
+Installing group/module packages:
+CHECK vs CMake automake                                           noarch                                  1.16.1-10.fc30                                                            updates                                  695 k
+Y/N elfutils                                           x86_64                                  0.176-3.fc30                                                              updates                                  292 k
+Y gcc-c++                                            x86_64                                  9.1.1-1.fc30                                                              updates                                   12 M
+Y gdb                                                x86_64                                  8.3-6.fc30                                                                updates                                  131 k
+Y glibc-devel                                        x86_64                                  2.29-15.fc30                                                              updates                                  1.0 M
+N perf                                               x86_64                                  5.1.12-300.fc30                                                           updates                                  1.9 M
+N valgrind                                           x86_64                                  1:3.15.0-9.fc30                                                           updates                                   12 M
+Y/N autoconf                                           noarch                                  2.69-29.fc30                                                              fedora                                   698 k
+Y binutils                                           x86_64                                  2.31.1-29.fc30                                                            fedora                                   5.6 M
+Y/N bison                                              x86_64                                  3.0.5-2.fc30                                                              fedora                                   687 k
+ Y/N vs bison byacc                                              x86_64                                  1.9.20170709-7.fc30                                                       fedora                                    83 k
+Y/N ccache                                             x86_64                                  3.4.3-2.fc30                                                              fedora                                   217 k
+Y/N cscope                                             x86_64                                  15.9-3.fc30                                                               fedora                                   206 k
+Y/N ctags                                              x86_64                                  5.8-25.fc30                                                               fedora                                   158 k
+Y/N flex                                               x86_64                                  2.6.4-2.fc30                                                              fedora                                   305 k
+seems like flex and bison ar needed for compiler developers
+Y indent                                             x86_64                                  2.2.12-3.fc30                                                             fedora                                   177 k
+N libtool                                            x86_64                                  2.4.6-29.fc30                                                             fedora                                   687 k
+Y?N ltrace                                             x86_64                                  0.7.91-30.fc30                                                            fedora                                   136 k
+Y make                                               x86_64                                  1:4.2.1-13.fc30                                                           fedora                                   482 k
+Y?N strace                                             x86_64                                  5.0-1.fc30                                                                fedora                                   975 k
+Installing dependencies:
+ boost-regex                                        x86_64                                  1.69.0-8.fc30                                                             updates                                  287 k
+ cpp                                                x86_64                                  9.1.1-1.fc30                                                              updates                                  9.7 M
+ gcc                                                x86_64                                  9.1.1-1.fc30                                                              updates                                   23 M
+ gdb-headless                                       x86_64                                  8.3-6.fc30                                                                updates                                  3.4 M
+ glibc-headers                                      x86_64                                  2.29-15.fc30                                                              updates                                  476 k
+ kernel-headers                                     x86_64                                  5.1.16-300.fc30                                                           updates                                  1.2 M
+ libstdc++-devel                                    x86_64                                  9.1.1-1.fc30                                                              updates                                  2.1 M
+ libxcrypt-devel                                    x86_64                                  4.4.6-2.fc30                                                              updates                                   35 k
+ bzip2                                              x86_64                                  1.0.6-29.fc30                                                             fedora                                    49 k
+ gc                                                 x86_64                                  7.6.4-5.fc30                                                              fedora                                    93 k
+ guile22                                            x86_64                                  2.2.4-3.fc30                                                              fedora                                   6.4 M
+ isl                                                x86_64                                  0.16.1-8.fc30                                                             fedora                                   796 k
+ libatomic_ops                                      x86_64                                  7.6.6-2.fc30                                                              fedora                                    34 k
+ libbabeltrace                                      x86_64                                  1.5.6-2.fc30                                                              fedora                                   184 k
+ libipt                                             x86_64                                  2.0-2.fc30                                                                fedora                                    51 k
+ libmpc                                             x86_64                                  1.1.0-3.fc30                                                              fedora                                    56 k
+ m4                                                 x86_64                                  1.4.18-10.fc30                                                            fedora                                   210 k
+ numactl-libs                                       x86_64                                  2.0.12-2.fc30                                                             fedora                                    27 k
+ perl-Thread-Queue                                  noarch                                  3.13-2.fc30                                                               fedora                                    21 k
+ slang                                              x86_64                                  2.3.2-5.fc30                                                              fedora                                   336 k
+ source-highlight                                   x86_64                                  3.1.8-24.fc30                                                             fedora                                   648 k
+ xemacs-filesystem                                  noarch                                  21.5.34-33.20190323hgc0ed7ef9a5a1.fc30                                    fedora                                    10 k
+Installing weak dependencies:
+ gcc-gdb-plugin                                     x86_64                                  9.1.1-1.fc30                                                              updates                                  125 k
+Installing Groups:
+ C Development Tools and Libraries                                                                                                                                                                                  
+
+Transaction Summary
+=====================================================================================================================================================================================================================
+Install  43 Packages
+
+Total download size: 87 M
+Installed size: 302 M
+#+END_SRC
+
+I stop at this since I saw when installing GCC (which I must install) some of the tools and probably dependencies will be installed as well. So I have to return to this after installing GCC.
+
+** gcc
+
+#+BEGIN_SRC linux
+[root@minifedora zoran]# dnf install gcc
+Installed:
+  gcc-9.1.1-1.fc30.x86_64          cpp-9.1.1-1.fc30.x86_64    glibc-devel-2.29-15.fc30.x86_64   glibc-headers-2.29-15.fc30.x86_64   kernel-headers-5.1.16-300.fc30.x86_64   libxcrypt-devel-4.4.6-2.fc30.x86_64  
+  binutils-2.31.1-29.fc30.x86_64   isl-0.16.1-8.fc30.x86_64   libmpc-1.1.0-3.fc30.x86_64       
+
+Complete!
+[root@minifedora zoran]# 
+#+END_SRC
+
+** gcc-c++
+
+#+BEGIN_SRC linux
+[root@minifedora zoran]# dnf install gcc-c++
+Installed:
+  gcc-c++-9.1.1-1.fc30.x86_64                                                                           libstdc++-devel-9.1.1-1.fc30.x86_64                                                                          
+
+Complete!
+#+END_SRC   
+
+** gdb indent make
+
+#+BEGIN_SRC linux
+[root@minifedora zoran]# dnf install gdb indent make
+Installed:
+  gdb-8.3-6.fc30.x86_64                    indent-2.2.12-3.fc30.x86_64    make-1:4.2.1-13.fc30.x86_64    gcc-gdb-plugin-9.1.1-1.fc30.x86_64    boost-regex-1.69.0-8.fc30.x86_64     gdb-headless-8.3-6.fc30.x86_64   
+  ctags-5.8-25.fc30.x86_64                 gc-7.6.4-5.fc30.x86_64         guile22-2.2.4-3.fc30.x86_64    libatomic_ops-7.6.6-2.fc30.x86_64     libbabeltrace-1.5.6-2.fc30.x86_64    libipt-2.0-2.fc30.x86_64         
+  source-highlight-3.1.8-24.fc30.x86_64   
+
+Complete!
+[root@minifedora zoran]# 
+[0] 0:bash*                                                            
+#+END_SRC
+
+*** number of [packages so far 536
+#+BEGIN_SRC linux
+[root@minifedora zoran]# rpm -qa | wc -l
+536
+[root@minifedora zoran]# 
+#+END_SRC
+
+* LLVM
+  Just to check size when installing as package.
+#+BEGIN_SRC linux
+[root@minifedora zoran]# dnf install llvm
+Last metadata expiration check: 0:23:27 ago on Tue 09 Jul 2019 01:23:14 AM CEST.
+Dependencies resolved.
+=====================================================================================================================================================================================================================
+ Package                                             Architecture                                     Version                                                Repository                                         Size
+=====================================================================================================================================================================================================================
+Installing:
+ llvm                                                x86_64                                           8.0.0-6.fc30                                           updates                                           3.8 M
+Installing dependencies:
+ llvm-libs                                           x86_64                                           8.0.0-6.fc30                                           updates                                            19 M
+
+Transaction Summary
+=====================================================================================================================================================================================================================
+Install  2 Packages
+
+Total download size: 23 M
+Installed size: 122 M
+Is this ok [y/N]: n
+Operation aborted.
+[root@minifedora zoran]# 
+#+END_SRC
+
+

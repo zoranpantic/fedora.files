@@ -1,0 +1,333 @@
+#+TITLE:cmake-ide Installation in Emacs (Fedora) 
+#+AUTHOR:zorpan
+#+BEGIN_COMMENT
+#+END_COMMENT
+
+* Introduction
+[[ https://github.com/atilaneves/cmake-ide][atilaneves github page of his cmake-ide project]
+He is the real author of the most important parts of this guide, I just reworded it and tried to describe procedure in such way that it became approachable even for beginners. If you are trying this procedure you should first look at his page and if you encounter some problem on the way you should first look for issues on same page.  
+
+One more (silly) word. CMake (that we will install first as a part of toolchain build) is not cmake-ide. cmake-ide is what atilaneves wrote, and CMake is well known software used to build C/C++ projects.
+
+I am providing this guide to my C/C++ students though I hope someone else might benefit from it too. They (students) are mostly beginners and it begs the following question. Is this something beginners need, is it not better for them to use Visual Studio or Block Code? Answer is, my students will use either of two mentioned and other unmentioned IDEs depending on OS of their choice, and if they study microcontroller architecture they will use few more IDEs as well. I am trying to present to them the whole toolchain structure since I believe it is beneficial for any programmer to understand more than just the syntax of any given language, and even more so when we talk about C/C++ programmers. For my students as well as for anyone else doing this it will be very beneficial to learn basics of software we are installing, especially CMake and all the software that is part of LLVM project. So far I received only positive feedback on this one. Those interested in building their own environment are glad they got instructions, and those not interested in doing this are glad this is not mandatory task. 
+
+This procedure was tested on Fedora30 VM. When started Emacs installation was kept to minimum with EVIL mode enabled only. Fedora install was also basic at the beginning of this procedure, Clang for ex. was not part of the system from the beginning. Clang-devel will have to be installed since we are using it to build rtags. One needs to use package-devel package if one uses them is to compile C and/or C++ code. Such packages commonly contain header files needed for compilation process and fedora names them *-devel packages.  
+
+Following (starting with chapter 2) describes how to build complete toolchain for C/C++ development on Linux. That sounds like daunting project, and it sort of is, but it is also easier than one thinks. Minimum prerequisite is that you are familiar with Emacs because Emacs is our editor. I will be using Emacs in EVIL mode so anyone who knows how to move in Vi/Vim editor will be able to follow pretty easily. (If you know Vi/Vim you can start using Emacs right away by enabling EVIL mode.) It goes without saying that you have to have basic familiarity with Linux as well. It is probably possible to do this on Windows as well but I would not know how to do it. I had troubles with Emacs on Windows alone, and thought of doing this on Windows makes me shudder. Still, bare in mind that you will face uphill battle to orient yourself within Emacs if this is your first contact with it. But then, think of the coolness factor you will achieve if you can use both, Vim and Emacs. Why Emacs? Possible jokes aside Emacs can be bent to whatever programmer needs. Could all of these be done with Vi? Probably, but I don't know how.
+
+Word of caution. Try this first on VM of your choice and when sure you got it right do it on your system. 
+
+* GCC and gdb
+  GCC and gdb are shipped with Fedora30. It means we can compile C code and even debug it. And guess what, for most if not all of the examples in our (and most of other alike) beginner courses it is sufficient to do the job. However, it would not suffice in world outside of beginners courses since it lack facilities any toolchain worthy of its salt has to have, namely syntax and error checking, command completion, tagging, indexing, refactoring and more. It is however relatively easy to build toolchain that would appear to be good enough. Add Emacs for an editor, CMake and make for project building, ctags or rtags for indexing and tagging, flycheck and irony or alike for syntax checking and you are almost done. And although yu might be almost happy with it when working in C yu might find yourself limited when it comes to indexing and refactoring since it seems it works only of open files.It means that for any non trivial project you are in trouble. Imagine if your project consist of hundred files and you would have to have them all open at all times in order to have working links between them so your toolchain can work with them. When it comes to C++ its complexity makes things even worse. Code atilaneves wrote will help us (with other software we are going to install) to build real life IDE, worthy of its salt, with indexing, tagging, refactoring and all.
+First I will take a look at what is already in fedora, namely GCC and gdb. It will not be exhaustive look, far from it, but it should be enough to start compiling and debugging the code I write. I will use debugging on very basic way, just to introduce the tool, not to dig in art of debugging the code.  
+
+** How to use gcc and gdb in Linux
+   Here i should provide example of how to use GCC and gdb. After installing CMake I could add CMake to complete the example and I should point that syntax checking is not part of what was "built" but it could be easily accomplished by picking parts of this guide that deal with syntax checking.
+
+*** gcc and g++ (or cc and c++)
+    We can take a look at both C and C++ examples and how to compile them. Here is simple C code that I will compile and run on this machine.
+#+BEGIN_SRC C
+// hello.c
+int main() {
+   printf("Hello World\n");
+   printf("Welcome to me\n");
+   return 0;
+}
+#+END_SRC
+
+In order to compile C code in Linux using GCC you should run following command:
+#+BEGIN_SRC 
+[zoran@fedora-vm src]$ gcc hello.c
+[zoran@fedora-vm src]$ 
+#+END_SRC
+
+It is possible to run
+#+BEGIN_SRC 
+cc hello.c
+#+END_SRC
+instead if your system links cc command to gcc. In any case running previous command will produce a.out file in same directory in which you run this command. In my case it is same directory in which is source file hello.c.
+
+Next is to check what is the result of compilation. Run following in same directory.
+#+BEGIN_SRC 
+[zoran@fedora-vm src]$ ./a.out 
+Hello World
+Welcome to me
+[zoran@fedora-vm src]$ 
+#+END_SRC
+
+Well, it worked. How about C++? Can we compile C++ code with GCC too?
+Following is simple C++ code and if we try running g++ command it might work, or maybe not if compiler and libraries for C++ are not installed. In fedora30 workstation that I am using gcc-c++ package was not installed. 
+#+BEGIN_SRC C++
+/* hello.cpp */
+#include<iostream> 
+using namespace std; 
+int main() {
+   cout<<"Hello World\n"; 
+   cout<<"Welcome to me\n"; 
+   return 0; 
+}   
+#+END_SRC
+
+Command needed to compile C++ code on Linux with GCC compiler is:
+#+BEGIN_SRC 
+g++ <name_of_the_source_c++_file>
+#+END_SRC
+
+If you are using fedora30 workstation than you can't execute g++ command since you don't have gcc-c++ package installed and you will have to do it first. Following is an example how installation of gcc-c++ package might proceed. Your output might of course differ from mine. In case you wonder libstdc++-devel is GNU Standard C++ Library developed and provided by good folk at gnu.org.
+#+BEGIN_SRC 
+[zoran@fedora-vm src]$ sudo dnf install gcc-c++
+Last metadata expiration check: 0:00:57 ago on Fri 05 Jul 2019 01:44:46 AM CEST.
+Dependencies resolved.
+=====================================================================================================================================================================================================================
+ Package                                                 Architecture                                   Version                                                Repository                                       Size
+=====================================================================================================================================================================================================================
+Installing:
+ gcc-c++                                                 x86_64                                         9.1.1-1.fc30                                           updates                                          12 M
+Installing dependencies:
+ libstdc++-devel                                         x86_64                                         9.1.1-1.fc30                                           updates                                         2.1 M
+
+Transaction Summary
+=====================================================================================================================================================================================================================
+Install  2 Packages
+
+Total download size: 14 M
+Installed size: 41 M
+Is this ok [y/N]: y
+Downloading Packages:
+(1/2): libstdc++-devel-9.1.1-1.fc30.x86_64.rpm                                                                                                                                       1.9 MB/s | 2.1 MB     00:01    
+(2/2): gcc-c++-9.1.1-1.fc30.x86_64.rpm                                                                                                                                               7.1 MB/s |  12 MB     00:01    
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Total                                                                                                                                                                                5.9 MB/s |  14 MB     00:02     
+Running transaction check
+Transaction check succeeded.
+Running transaction test
+Transaction test succeeded.
+Running transaction
+  Preparing        :                                                                                                                                                                                             1/1 
+  Installing       : libstdc++-devel-9.1.1-1.fc30.x86_64                                                                                                                                                         1/2 
+  Installing       : gcc-c++-9.1.1-1.fc30.x86_64                                                                                                                                                                 2/2 
+  Running scriptlet: gcc-c++-9.1.1-1.fc30.x86_64                                                                                                                                                                 2/2 
+  Verifying        : gcc-c++-9.1.1-1.fc30.x86_64                                                                                                                                                                 1/2 
+  Verifying        : libstdc++-devel-9.1.1-1.fc30.x86_64                                                                                                                                                         2/2 
+
+Installed:
+  gcc-c++-9.1.1-1.fc30.x86_64                                                                           libstdc++-devel-9.1.1-1.fc30.x86_64                                                                          
+
+Complete!
+[zoran@fedora-vm src]$ 
+#+END_SRC
+
+Now we can run g++ command and compile our hello.cpp file but if we do it without providing name for our binary we will overwrite a.out file we created when we compiled hello.c file using gcc command. It is not of big importance for us but is surely nice to know that we can decide what will our binary file be named when compiling the source. 
+#+BEGIN_SRC 
+[zoran@fedora-vm src]$ g++ hello.cpp -o hellocpp.out
+[zoran@fedora-vm src]$ ./hellocpp.out 
+Hello World
+Welcome to me
+[zoran@fedora-vm src]$ 
+#+END_SRC
+
+You can optionally provide C++ standard your code should comply with when compiled. For example:
+#+BEGIN_SRC 
+[zoran@fedora-vm src]$ g++ -std=c++14 hello.cpp -o hellocpp14.out
+[zoran@fedora-vm src]$ ./hellocpp14.out 
+Hello World
+Welcome to me
+[zoran@fedora-vm src]$
+#+END_SRC
+
+In case you wonder what is the default version gcc will use if you don't provide one, here is the answer providing you are using gcc newer than version 4.7 On my machine answer is c++ standard 14 so pointing to standard 14 in previous command did not change anything.  
+#+BEGIN_SRC 
+[zoran@fedora-vm src]$ g++ -dM -E -x c++  /dev/null | grep -F __cplusplus
+#define __cplusplus 201402L
+#+END_SRC
+
+*** gdb
+    A debugger allows you to pause and continue execution of a program. It also allows you to set a "breakpoints" where program pauses and allows you to take a look at its state. Debugger allows you to watch variables and their changes so you can spot some unexpected or wrong value being assigned. It will also allow you to step through execution of the program instruction by instruction. There is more to this but since I am not trying to describe all the functionalists of debugger this will suffice. Debugger I will introduce at this point is named gdb and is developed by already mentioned good folk at [[https://www.gnu.org/software/gdb/][GNU project]]
+    To debug any application system needs its source code and debugging symbols installed on the system to get more information with respect to individual frames in the stack. Debug info packages of all the dependencies of the binary you are trying to debug need to be installed. You will see what packages you need if any, as soon as you try to run gdb debugger. One more (important) thing. We have to compile code in such way it can be debugged, or in other words we have to provide -g flag when invoking gcc or g++ commands. You should probably make that as your default way of compiling code. As an example let's compile our hello.c but this time with -g flag and let's give different name to binary so we don't overwrite a.out. Once done you will see that d.out and a.out differ in size although we used same source code. 
+#+BEGIN_SRC bash
+[zoran@fedora-vm src]$ gcc -g hello.c -o d.out
+[zoran@fedora-vm src]$ ls -la
+total 164
+-rwxrwxr-x.  1 zoran zoran 22224 Jul  4 22:55 a.out
+-rwxrwxr-x.  1 zoran zoran 24584 Jul  5 03:11 d.out
+-rw-rw-r--.  1 zoran zoran   100 Jul  4 18:11 hello.c
+[zoran@fedora-vm src]$ 
+#+END_SRC
+Let's try to debug now. One has to simply run gdb command with binary file as argument. After running gdb d.out (in my case) gdb has given me some output and then returned a prompt. In that prompt I typed run in order to run the binary d.out I provided as argument to gdb command. You can see that binary has run correctly but gdb complained about "Missing separate debuginfos" and also gave information about packages that will have to be installed. That is neat. 
+#+BEGIN_SRC 
+[zoran@fedora-vm src]$ gdb d.out 
+GNU gdb (GDB) Fedora 8.3-3.fc30
+Copyright (C) 2019 Free Software Foundation, Inc.
+License GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>
+This is free software: you are free to change and redistribute it.
+There is NO WARRANTY, to the extent permitted by law.
+Type "show copying" and "show warranty" for details.
+This GDB was configured as "x86_64-redhat-linux-gnu".
+Type "show configuration" for configuration details.
+For bug reporting instructions, please see:
+<http://www.gnu.org/software/gdb/bugs/>.
+Find the GDB manual and other documentation resources online at:
+    <http://www.gnu.org/software/gdb/documentation/>.
+
+For help, type "help".
+Type "apropos word" to search for commands related to "word"...
+Reading symbols from d.out...
+(gdb) run
+Starting program: /home/zoran/src/d.out 
+Missing separate debuginfos, use: dnf debuginfo-install glibc-2.29-15.fc30.x86_64
+Hello World
+Welcome to me
+[Inferior 1 (process 3232) exited normally]
+(gdb) q
+[zoran@fedora-vm src]$ 
+#+END_SRC
+Later when we build our toolchain with Emacs as editor I will come back to debugger and debugging. 
+
+* CMake, Make, ninja
+** CMake
+   CMake is build file generator, it will build [[https://www.gnu.org/software/make/manual/make.html#Makefile-Contents][Makefile]] or [[https://ninja-build.org/][Ninjafile]] for us among other files and folders. That alone is already nice, but there is more to it. CMake is compiler and system independent. It uses CMake language which is arguably not the nicest language around but it is well worthy the learning effort for what it does. CMake enables you to build, test and package the software. CMakeLists.txt is fixed name that has to be at least in the root of our project and i will write an example of it a bit later. [[https://cmake.org/cmake/help/v3.14/][CMake documentation]] is an obvious place to start learning about CMake but I also heartily recommend following [[https://www.youtube.com/watch?v=jt3meXdP-QI&t=2316s][YT video]] (Florent Castelli: Introduction to CMake) to all of you starting with CMake for the first time and maybe to some of you who already have some experience with CMake. CMake is part of many commercial and free toolchains in use so you are probably using it even if you are not aware of it. I will mention it one more time, you will do yourself a favor if you spend some time learning basics of CMake, as well as basics of any software mentioned in this guide.  
+
+For me, following command was all that was needed in order to install CMake.
+#+BEGIN_SRC 
+sudo dnf install cmake
+#+END_SRC
+
+Example of how to use CMake is provided a bit further down, after I describe basics of make. 
+
+** Make or ninja
+   Make and ninja are both build systems but are different from each other. Make could be used on its own to build projects while ninja will probably be of limited use on its own. Ninja should make use of CMake for ex. [[https://www.gnu.org/software/make/][GNU make]] requires makefile to be created but we will not do it by hand. We will use CMake to do that for us. So regardless if you wish to use Make or [[https://ninja-build.org/manual.html#_comparison_to_make][ninja build system]] you will make use of CMake first. For small projects you will not notice any difference but ninja should be faster than Make when building very large projects due to its simplicity. I will proceed by installing Make on my system. It is probably fair to say that most of the developers who are using LLVM and its libraries are Ninja users. 
+#+BEGIN_SRC 
+sudo dnf install make
+#+END_SRC
+
+*** example
+    We will revisit our previous hello.c file but this time we will create separate folder for it. That folder will become root of our newly built project. That is right, we will not work with single source and single binary file any more. We will create whole project that could be used to create executable for different system if needed. We will also separate source from compiled binaries and that will make it easy for us to delete all automatically generated files and start from beginning if needed. Our compiler is still gcc but we will now invoke it from CMake instead of invoking it directly from command line, and we will consequently configure all the flags, standards required and so on in CMake instead of in gcc. After doing this you will hopefully be able to understand that CMake is not a compiler, it is simply a software that allows us to build our project, but as far as compiling is concerned it is still the job for gcc. Later when you install LLVM/Clang you could change compiler from gcc to Clang by writing correct parameters in CMakeLists.txt fiel. CMake will also create makefile that will let us run make command. It is also possible to invoke make command from cmake command but I will not use that, at least not now. I think it somewhat obscures what is really happening. In order to better understand the process you should check what is generated after running cmake (or ccmake) command and then what is generated after running make command (or cmake --build if you insist.) 
+
+I am creating testproject directory under ~/src directory. That directory will be the root of my project. 
+#+BEGIN_SRC 
+[zoran@fedora-vm src]$ pwd
+/home/zoran/src
+[zoran@fedora-vm src]$ mkdir testproject
+[zoran@fedora-vm src]$ cd testproject
+[zoran@fedora-vm testproject]$ pwd
+/home/zoran/src/testproject
+[zoran@fedora-vm testproject]$ 
+#+END_SRC
+
+C file we created earlier is also in that directory. I simply copied it from directory above. If your hello.c file is not there any more, simply recreate it and save it in your newly created testproject directory. 
+#+BEGIN_SRC 
+[zoran@fedora-vm testproject]$ cp ../hello.c .
+[zoran@fedora-vm testproject]$ ls -la
+total 12
+drwxrwxr-x. 2 zoran zoran 4096 Jul  5 10:23 .
+drwxrwxr-x. 3 zoran zoran 4096 Jul  5 10:19 ..
+-rw-rw-r--. 1 zoran zoran  100 Jul  5 10:23 hello.c
+[zoran@fedora-vm testproject]$ pwd
+/home/zoran/src/testproject
+[zoran@fedora-vm testproject]$ 
+#+END_SRC
+
+As I wrote earlier I wish to create separate directory for my binaries (executable files) and that is done with following
+#+BEGIN_SRC 
+[zoran@fedora-vm testproject]$ mkdir build
+[zoran@fedora-vm testproject]$ ls -la
+total 16
+drwxrwxr-x. 3 zoran zoran 4096 Jul  5 10:27 .
+drwxrwxr-x. 3 zoran zoran 4096 Jul  5 10:19 ..
+drwxrwxr-x. 2 zoran zoran 4096 Jul  5 10:27 build
+-rw-rw-r--. 1 zoran zoran  100 Jul  5 10:23 hello.c
+[zoran@fedora-vm testproject]$ 
+#+END_SRC
+
+Now I have to create CMakeLists.txt file where I will explain to CMake how to build this project. I am building trivial project so it will not be very difficult to write minimum required CMakeLists.txt file. You should spend some time checking through [[https://cmake.org/cmake/help/v3.14/][CMake documentation]] in accordance with CMake version you installed on your system.   
+#+BEGIN_SRC 
+[zoran@fedora-vm testproject]$ cmake --version
+cmake version 3.14.5
+#+END_SRC
+
+This is opportune moment to explain why I've chosen fedora for this build. First, it is simple to install, but Debian is also simple to install. Secondly and more importantly it is rolling release and using its package system (dnf) will result in newer packages installed on the system. Else, one might be forced to compile some packages in order to be able to write C++17 code for example. How about other distros? Ubuntu is Debian derivative plus after32bit fiasco nobody really cares about it any more. Arch is too complex to install. CentOS is RedHat and one can say that fedora is closely related to them. Open SUSE (SLES derivative) was yet another candidate, and I could have chosen Tumbleweed instead of fedora. Both, fedora and Tumbleweed are rolling release distros (and they are not the only ones), so there is nothing stopping you from choosing another distro. Toolchain I build here is useful for training purposes only, and if and when you try to build one that might be used in production scenario your decisions will have to be based on somewhat different criteria. However when such moment occurs you will know what criteria your build has to satisfy. 
+
+Back to CmakeLists.txt file. You could place CMakeLists.txt file in every directory of your project where it makes sense. But since projects I am working with here are trivial I will create CMakeLists.txt file only in root directory of my project and will write everything needed only to that file. Since I wish to separate binaries from source code I have created two folders, root folder named testproject and build folder within. There will be more folders created in due process but it will be done by tools I am using so I don't have to worry about placing CMakeLists.txt file in such. I have to worry only about the folders I created. Do all these CMakelists.txt files have to be identical? Not really, but more about it later. 
+#+BEGIN_SRC 
+cmake_minimum_required(VERSION 3.14)
+project(testproject)
+set(CMAKE_C_FLAGS "-std=c11")
+set(MAKE_C_COMPILE_FEATURES "-c_function_prototypes")
+add_compile_options( -Wall -Wextra -Wpedantic)
+add_executable(result hello.c)
+#+END_SRC
+
+This project will compile only on system that supports cmake version 3.14 and up. Project name would not only name our project but will be base for what will project be called if it is for example exported to MS Visual Studio, in which case it would be named testproject.sln (according to name I gave to project in this example). Beyond that project name can be anything and if you are compiling for Linux CMake will not make much use of it. This example file also requires both compiler and source to comply to C11 standard. c_function_prototypes is c11 standard feature and is explicitly required to be supported. It won't make a difference in our case but in reality that would be better way requesting feature support than requesting certain standard. Three W* compile options are used to get warning during compilation process. As you know more warning you get from compiler, the better. Lastly we gave name to our binary that will be created, result)
+
+After that file (CMakeLists.txt) is created I can run cmake or maybe better ccmake. Later gives me gui-like appearance and it is surely easier to deal with than cmake. But since I created separate build folder where binaries will be stored I will first have to descend to that folder and execute cmake (ccmake) from there. That is why I am using 
+#+BEGIN_SRC 
+ccmake ..
+#+END_SRC
+in order to point to the directory up.
+o
+
+**** example of building binaries for Windows
+     Just to show how would one proceed in case we are compiling for Windows instead for Linux. I still need Windows system in order to test it but CMake allows me to build for Windows on Linux and vice versa as well. That was and still is revolutionary in the world of software development. Just bear in mind that what I am doing here is as simple as it can be. In production environment such task can be daunting and might require deep understanding of CMake and compiler involved.
+
+* LLVM 
+  Fedora does not ship with LLVM, it comes with GCC only. It does not work to compare LLVM with GCC since LLVM is not really a compiler, Clang is, so it is proper to compare GCC with Clang. But it is not point of this short text to do any of such so I am leaving it out. It is however opportune to mention that LLVM is umbrella project that contains Clang, debugger, linker, libraries and so on. 
+
+ Installed llvm-devel and clang-deval packages by using sudo dnf
+
+* Emacs configuration
+  I will share my Emacs ~/.emacs/init.el file that relates to our task and I will start with almost clean Emacs installation. Configuration will proceed step by step so even if you are not very familiar with Emacs you will be able to follow. But being able to use Vi is mandatory, since as I already wrote Emacs will be using EVIL mode. If you already know Emacs than you don't need 
+
+#+BEGIN_SRC elisp
+
+#+END_SRC 
+* rtags and Emacs configuration for rtags
+   RTags is a client/server application that indexes C/C++ code and keeps a persistent file-based database of references, declarations, definitions, symbolnames etc. It allows you to find symbols by name (including nested class and namespace scope). Most importantly we give you proper follow-symbol and find-references support.  
+  
+Installed rtags from [[https://github.com/Andersbakken/rtags#tldr-quickstart][github rtags page]]. Full installation process is explained [[https://github.com/Andersbakken/rtags/wiki/Installing-RTags][here]].  
+Installed in ~/bin/
+Created build folder in ~/bin/rtags/ and executed ./bin/rdm & in newly created ~/bin/rtags/build folder.
+Executed ./bin/rc -J . in same ~/bin/rtags/build folder.
+
+By using following commands I created separate build directory /usr/bin/rtags/build and compiled rtags binaries in that directory. 
+Last command requires you to wait until all the chat is done. You should carefully read links I provided you with before you write these commands. 
+#+BEGIN_SRC 
+cd /usr/bin
+sudo git clone --recursive https://github.com/Andersbakken/rtags.git
+cd rtags
+sudo mkdir build
+cd build
+sudo cmake .. -DCMAKE_EXPORT_COMPILE_COMMANDS=1 .
+sudo make
+sudo ./rdm &
+sudo ./rc -J . 
+#+END_SRC
+cmake .. is using this two dots to point to the folder up, since my command differs from what was shown in a link. I created build directory and that is why I have to point one folder up, since CMakeLists.txt is there and not in build directory.
+
+*** Emacs configuration for rtags and finishing service installation
+
+In Emacs it is important to first package-install rtags, and then to edit ~/.emacs/init.el file by adding (require 'rtags) entry.
+In order to execute M-x rtags-install RET I had to restart emacs and maybe even restart the system, do not remember if that was necessary. Once i installed rtags in emacs by that command I proceeded to testing the rtags as described in [[https://github.com/Andersbakken/rtags#tldr-quickstart][this link]] It worked and I was able to execute testing command. Only to mention that emacs +74:34 src/rdm.cpp command was execute from ~/bin/rtags/ because src folder needed was there and not under ~/bin/rtags/build that I created. Hopefully by creating that build folder I will have easier time in future to upgrade rtags. 
+
+This [[https://github.com/Andersbakken/rtags/wiki/Setup][link]] describes how to create rdm.socket and rdm.service
+Once that was done loading .cpp file in emacs started rdm.service (exactly as it should)
+
+This was the most critical part of whole process since rtags is doing heavy lifting in our not yet finished IDE. Rest of the configuration will be done in Emacs.
+
+* irony
+  [[https://github.com/Sarcasm/irony-mode][Irony]] is tool (Emacs minory mode) used for symbol completion, syntax checking and symbol information extraction. It utilizes clang (libclang) to do its job and requires irony-server to be built after installation. In short you need few commands to start working with it.
+#+BEGIN_SRC elisp
+M-x package-install <RET> irony <RET>
+after success add following to your ~/.emacs/init.el
+(require 'irony)
+do following to check that it worked as it should
+M-x eval-buffer <RET>
+if OK then
+M-x install-irony-server <RET>
+save init.el
+#+END_SRC
+
+Later by using cmake-ide you will have a compilation database in your project root and opening any c/c++ files inside the project should have irony load the database automatically.
+
+* company
+  [[http://company-mode.github.io/][Company mode]] is Emacs text completion framework. In combination with irony I just installed it will bring auto completion magic to C/C++ code. Company is frontend and it utilizes backends (irony for ex.) to do its  auto completion magic. 
+
