@@ -30,6 +30,7 @@
 (tool-bar-mode -1)
 (global-display-line-numbers-mode)
 (defalias 'yes-or-no-p 'y-or-n-p)
+(setq sentence-end-double-space nil)   
 
 (use-package evil
   :ensure t)
@@ -41,6 +42,12 @@
   :config
   (setq auto-package-update-delete-old-versions t)
   (auto-package-update-maybe))
+
+(when (fboundp 'winner-mode)
+      (winner-mode 1))
+
+(setenv "PATH" (concat (getenv "PATH") ":/usr/local/texlive/2019/bin/x86_64-linux"))
+    (setq exec-path (append exec-path '("/usr/local/texlive/2019/bin/x86_64-linux")))
 
 (use-package which-key
   :ensure t
@@ -54,8 +61,9 @@
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(default ((t (:inherit nil :stipple nil :background "#1E2326" :foreground "#DEDEDE" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 138 :width normal :foundry "ADBO" :family "Source Code Pro"))))
- '(aw-leading-char-face ((t (:foreground "red" :bold t :height 2.5)))))
+ '(default ((t (:inherit nil :stipple nil :background "#1E2326" :foreground "#DEDEDE" :inverse-video nil :box nil :strike-through nil :overline nil :underline nil :slant normal :weight normal :height 135 :width normal :foundry "ADBO" :family "Source Code Pro"))))
+ '(aw-leading-char-face ((t (:foreground "red" :bold t :height 2.5))))
+ '(preview-reference-face ((t (:background "gold")))))
 
 					; easy spell check
 (global-set-key (kbd "<f8>") 'ispell-word)
@@ -231,9 +239,6 @@
   :ensure t)
 
 ;(rtags-start-process-unless-running)
-(use-package cmake-ide)
-(cmake-ide-setup)
-
 ;; following is courtesy of http://syamajala.github.io/c-ide.html
 (require 'rtags) ;; optional, must have rtags installed
 ;;(require 'company-rtags)
@@ -243,6 +248,9 @@
     'company-backends 'company-rtags))
 (setq rtags-autostart-diagnostics t)
 (rtags-enable-standard-keybindings)
+
+(use-package cmake-ide)
+(cmake-ide-setup)
 
 ;; following is regarding emmet-moce html and css
 (use-package emmet-mode
@@ -301,7 +309,7 @@
  '(linum-format " %7i ")
  '(package-selected-packages
    (quote
-    (latex-preview-pane magit emmet-mode sublime-themes auto-complete-clang org-mode org-bullets which-key yasnippet-snippets yasnippet cmake-ide irony auto-package-update use-package flycheck rtags evil)))
+    (auctex latex-preview-pane magit emmet-mode sublime-themes auto-complete-clang org-mode org-bullets which-key yasnippet-snippets yasnippet cmake-ide irony auto-package-update use-package flycheck rtags evil)))
  '(rtags-path "~/.local/rtags/bin/"))
 
 ;;; init.el ends here
