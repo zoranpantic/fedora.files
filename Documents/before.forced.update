@@ -1,0 +1,46 @@
+[root@workstation zoran]# dnf --best --allowerasing update
+Last metadata expiration check: 0:17:15 ago on Thu 11 Jul 2019 11:40:04 AM CEST.
+Dependencies resolved.
+====================================================================================================================================================================================================================
+ Package                                                     Architecture                             Version                                                      Repository                                  Size
+====================================================================================================================================================================================================================
+Upgrading:
+ python-qt5-rpm-macros                                       noarch                                   5.12.2-5.fc30                                                updates                                     11 k
+ python3-qt5                                                 x86_64                                   5.12.2-5.fc30                                                updates                                    1.1 M
+ python3-qt5-base                                            x86_64                                   5.12.2-5.fc30                                                updates                                    2.7 M
+ python3-qt5-webkit                                          x86_64                                   5.12.2-5.fc30                                                updates                                    116 k
+ qgnomeplatform                                              x86_64                                   0.5-10.fc30                                                  updates                                    128 k
+ qt5-qtbase                                                  x86_64                                   5.12.4-1.fc30                                                updates                                    3.3 M
+ qt5-qtbase-common                                           noarch                                   5.12.4-1.fc30                                                updates                                     13 k
+ qt5-qtbase-gui                                              x86_64                                   5.12.4-1.fc30                                                updates                                    5.7 M
+ qt5-qtconnectivity                                          x86_64                                   5.12.4-1.fc30                                                updates                                    499 k
+ qt5-qtdeclarative                                           x86_64                                   5.12.4-1.fc30                                                updates                                    3.5 M
+ qt5-qtenginio                                               x86_64                                   1:1.6.2-24.fc30                                              updates                                    171 k
+ qt5-qtlocation                                              x86_64                                   5.12.4-1.fc30                                                updates                                    3.1 M
+ qt5-qtmultimedia                                            x86_64                                   5.12.4-1.fc30                                                updates                                    796 k
+ qt5-qtsensors                                               x86_64                                   5.12.4-1.fc30                                                updates                                    196 k
+ qt5-qtserialport                                            x86_64                                   5.12.4-1.fc30                                                updates                                     64 k
+ qt5-qtsvg                                                   x86_64                                   5.12.4-1.fc30                                                updates                                    171 k
+ qt5-qttools-common                                          noarch                                   5.12.4-1.fc30                                                updates                                     12 k
+ qt5-qttools-libs-designer                                   x86_64                                   5.12.4-1.fc30                                                updates                                    2.7 M
+ qt5-qttools-libs-help                                       x86_64                                   5.12.4-1.fc30                                                updates                                    142 k
+ qt5-qtwayland                                               x86_64                                   5.12.4-2.fc30                                                updates                                    816 k
+ qt5-qtwebchannel                                            x86_64                                   5.12.4-1.fc30                                                updates                                     87 k
+ qt5-qtwebengine                                             x86_64                                   5.12.4-5.fc30                                                updates                                     40 M
+ qt5-qtwebkit                                                x86_64                                   5.212.0-0.36.alpha2.fc30                                     updates                                     13 M
+ qt5-qtwebsockets                                            x86_64                                   5.12.4-1.fc30                                                updates                                     89 k
+ qt5-qtx11extras                                             x86_64                                   5.12.4-1.fc30                                                updates                                     34 k
+ qt5-qtxmlpatterns                                           x86_64                                   5.12.4-1.fc30                                                updates                                    1.0 M
+Removing dependent packages:
+ python3-qt5-webengine                                       x86_64                                   5.11.3-6.fc30                                                @fedora                                    559 k
+ qutebrowser                                                 noarch                                   1.6.3-1.fc30                                                 @updates                                   8.6 M
+
+Transaction Summary
+====================================================================================================================================================================================================================
+Upgrade  26 Packages
+Remove    2 Packages
+
+Total download size: 79 M
+Is this ok [y/N]: n
+Operation aborted.
+[root@workstation zoran]# 
