@@ -1,6 +1,7 @@
 ;;; package --- Summary
 ;; when in problem check logs and messages and also turn on M-x toggle-debug-on-error
 (require 'package)
+;; temp (hopefully) sollution for gnu download failed
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 ;(add-to-list 'package-archives
 ;             '("MELPA Stable" . "http://stable.melpa.org/packages/") t)
